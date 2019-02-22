@@ -5,6 +5,9 @@
     <file type="web" url="file://$PROJECT_DIR$/classroom_features" />
     <file type="web" url="file://$PROJECT_DIR$/qr_code" />
   </component>
+  <component name="JavaScriptSettings">
+    <option name="languageLevel" value="ES6" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>

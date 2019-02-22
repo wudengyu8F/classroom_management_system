@@ -20,6 +20,7 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!--springboot+thymeleaf处理页面-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
