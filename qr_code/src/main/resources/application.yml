@@ -2,3 +2,6 @@ server:
   port: 8080
   servlet:
     context-path: /qr_code
+
+QRCode:
+  classroomFeaturesPath: https://www.baidu.com
