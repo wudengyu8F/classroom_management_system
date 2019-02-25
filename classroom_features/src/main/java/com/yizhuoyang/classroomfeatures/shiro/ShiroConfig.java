@@ -1,10 +1,16 @@
 package com.yizhuoyang.classroomfeatures.shiro;
 
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.cache.CacheManager;
+import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import sun.misc.Cache;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -12,21 +18,8 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
-    @Value("${}")
-    private String host;
-
-    @Value("${}")
-    private int port;
-
-    @Value("${}")
-    private int timeout;
-
-    @Value("${}")
-    private String password;
-
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
-        System.out.println("ShiroConfiguration.shirFilter()");
         System.out.println("ShiroConfiguration.shirFilter()");
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
@@ -45,8 +38,44 @@ public class ShiroConfig {
         // 登录成功后要跳转的链接
 //        shiroFilterFactoryBean.setSuccessUrl("/index");
         //未授权界面;
-//        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/error");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
+
+    /**
+     * 凭证匹配器
+     */
+    @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        //散列算法: MD5
+        hashedCredentialsMatcher.setHashAlgorithmName("md5");
+        //散列次数: 2
+        hashedCredentialsMatcher.setHashIterations(2);
+        return hashedCredentialsMatcher;
+    }
+
+
+    @Bean
+    public MyShiroRealm myShiroRealm() {
+        MyShiroRealm myShiroRealm = new MyShiroRealm();
+        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        return myShiroRealm;
+    }
+
+    @Bean
+    public SecurityManager securityManager() {
+        DefaultSecurityManager securityManager = new DefaultSecurityManager();
+        securityManager.setRealm(myShiroRealm());
+        return securityManager;
+    }
+
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
+
 }
