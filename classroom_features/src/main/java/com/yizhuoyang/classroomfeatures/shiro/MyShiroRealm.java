@@ -21,46 +21,51 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Autowired
     private UserDao userDao;
 
+    /**
+     * 执行授权逻辑
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        String userName = (String) principalCollection.getPrimaryPrincipal();
+        String userId = (String) principalCollection.getPrimaryPrincipal();
         //从数据库或者缓存获取角色信息
-        Set<String> roles = getRolesByUsername(userName);
+//        Set<String> roles = getRolesByUserId(userId);
         //从数据库或者缓存获取权限信息
-        Set<String> permissions = getPermissionsByUsername(userName);
+        Set<String> permissions = getPermissionsByUserId(userId);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        simpleAuthorizationInfo.setRoles(roles);
+//        simpleAuthorizationInfo.setRoles(roles);
         simpleAuthorizationInfo.setStringPermissions(permissions);
         return simpleAuthorizationInfo;
     }
 
-    private Set<String> getPermissionsByUsername(String userName) {
-        List<String> strings = userDao.getPermissionsByUsername(userName);
-        return new HashSet<>(strings);
+    private Set<String> getPermissionsByUserId(String userId) {
+        return userDao.getPermissionsByUserId(userId);
     }
 
-    private Set<String> getRolesByUsername(String userName) {
-        List<String> list = userDao.getRolesByUsername(userName);
+    private Set<String> getRolesByUserId(String userId) {
+        List<String> list = userDao.getRolesByUserId(userId);
         return new HashSet<>(list);
     }
 
+    /**
+     * 执行认证逻辑
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         //1. 从主体传过来的认证信息中,获得用户名
-        String username = (String) authenticationToken.getPrincipal();
+        String userId = (String) authenticationToken.getPrincipal();
         //2.通过用户名到数据库获取凭证
-        String password = getPasswordByUsername(username);
-        if (password == null) {
+        String password = getPasswordByUserId(userId);
+        if ("".equals(password)) {
             return null;
         }
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(username,
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userId,
                 password, "myShiroRealm");
-        //加盐
-        authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(username));
+        //TODO 加盐
+//        authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(userId));
         return authenticationInfo;
     }
 
-    private String getPasswordByUsername(String username) {
-        return userDao.getPasswordByUsername(username);
+    private String getPasswordByUserId(String userId) {
+        return userDao.getPasswordByUserId(userId);
     }
 }

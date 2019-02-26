@@ -1,7 +1,6 @@
 server:
-  port: 8081
-  servlet:
-    context-path: /qr_code
+  port: 8085
+
 spring:
   thymeleaf:
     cache: false
@@ -14,9 +13,9 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
 
-mysql:
   datasource:
-    driver-Class-Name: com.mysql.cj.jdbc.Driver
-    jdbc-url: jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF-8&connectTimeout=60000&socketTimeout=60000&tinyInt1isBit=false&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/project?useUnicode=true&characterEncoding=UTF-8&connectTimeout=60000&socketTimeout=60000&tinyInt1isBit=false&serverTimezone=GMT%2B8
     username: root
     password: rootroot
+    type: com.alibaba.druid.pool.DruidDataSource

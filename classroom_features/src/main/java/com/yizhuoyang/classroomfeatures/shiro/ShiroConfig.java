@@ -1,17 +1,13 @@
 package com.yizhuoyang.classroomfeatures.shiro;
 
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.cache.CacheManager;
-import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import sun.misc.Cache;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -20,11 +16,10 @@ import java.util.Map;
 public class ShiroConfig {
 
     @Bean("shiroFilter")
-    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") DefaultSecurityManager securityManager) {
+    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //注意过滤器配置顺序 不能颠倒
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了，登出后跳转配置的loginUrl
 //        filterChainDefinitionMap.put("/logout", "logout");
@@ -32,14 +27,19 @@ public class ShiroConfig {
 //        filterChainDefinitionMap.put("/static/**", "anon");
 //        filterChainDefinitionMap.put("/ajaxLogin", "anon");
 //        filterChainDefinitionMap.put("/login", "anon");
-//        filterChainDefinitionMap.put("/**", "authc");
-        //配置shiro默认登录界面地址，前后端分离中登录界面跳转应由前端路由控制，后台仅返回json数据
-        shiroFilterFactoryBean.setLoginUrl("/login");
-        filterChainDefinitionMap.put("/add", "anon");
+        //认证过滤器 authc--认证  anon--不需要认证
+        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/login/*", "anon");
+
+        //授权过滤器
+        filterChainDefinitionMap.put("/login/add", "perms[user:add]");
+
+        //登录地址
+        shiroFilterFactoryBean.setLoginUrl("/login/subLogin");
         // 登录成功后要跳转的链接
 //        shiroFilterFactoryBean.setSuccessUrl("/index");
         //未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/error");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/login/error");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -52,11 +52,8 @@ public class ShiroConfig {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         //散列算法: MD5
         hashedCredentialsMatcher.setHashAlgorithmName("md5");
-        //散列次数: 2
-        hashedCredentialsMatcher.setHashIterations(2);
         return hashedCredentialsMatcher;
     }
-
 
     @Bean("myShiroRealm")
     public MyShiroRealm myShiroRealm() {
@@ -66,8 +63,8 @@ public class ShiroConfig {
     }
 
     @Bean("securityManager")
-    public DefaultSecurityManager securityManager() {
-        DefaultSecurityManager securityManager = new DefaultSecurityManager();
+    public SecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(myShiroRealm());
         return securityManager;
     }

@@ -1,13 +1,17 @@
 package com.yizhuoyang.classroomfeatures.dao;
 
+import com.yizhuoyang.classroomfeatures.domain.UserRequest;
+
 import java.util.List;
+import java.util.Set;
 
 public interface UserDao {
 
+    String getPasswordByUserId(String userId);
 
-    String getPasswordByUsername(String username);
+    int register(UserRequest userRequest);
 
-    List<String> getRolesByUsername(String userName);
+    Set<String> getPermissionsByUserId(String userId);
 
-    List<String> getPermissionsByUsername(String userName);
+    List<String> getRolesByUserId(String userId);
 }
