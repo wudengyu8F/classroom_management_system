@@ -44,7 +44,7 @@ public class UserDaoImplTest {
         userRequest.setUserId(23453464);
         userRequest.setUsername("wangwu");
         userRequest.setPassword("123456");
-        userRequest.setRole("student");
+        userRequest.setRoles("student");
         userRequest.setSex(true);
         userRequest.setSalt("sadfuwecalsduw");
         Result register = userService.register(userRequest);

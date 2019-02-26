@@ -13,5 +13,5 @@ public interface UserDao {
 
     Set<String> getPermissionsByUserId(String userId);
 
-    List<String> getRolesByUserId(String userId);
+    Set<String> getRolesByUserId(String userId);
 }

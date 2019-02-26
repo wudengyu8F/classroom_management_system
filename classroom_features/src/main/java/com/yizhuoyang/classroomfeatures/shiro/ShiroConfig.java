@@ -28,16 +28,16 @@ public class ShiroConfig {
 //        filterChainDefinitionMap.put("/ajaxLogin", "anon");
 //        filterChainDefinitionMap.put("/login", "anon");
         //认证过滤器 authc--认证  anon--不需要认证
-        filterChainDefinitionMap.put("/**", "authc");
-        filterChainDefinitionMap.put("/login/*", "anon");
-
         //授权过滤器
         filterChainDefinitionMap.put("/login/add", "perms[user:add]");
-
+        //角色过滤器
+        filterChainDefinitionMap.put("/login/test", "roles[admin]");
+        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/login/*", "anon");
         //登录地址
         shiroFilterFactoryBean.setLoginUrl("/login/subLogin");
         // 登录成功后要跳转的链接
-//        shiroFilterFactoryBean.setSuccessUrl("/index");
+        shiroFilterFactoryBean.setSuccessUrl("/login/index");
         //未授权界面;
         shiroFilterFactoryBean.setUnauthorizedUrl("/login/error");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

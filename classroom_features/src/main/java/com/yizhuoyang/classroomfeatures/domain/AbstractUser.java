@@ -15,7 +15,7 @@ abstract class AbstractUser {
 
     private String salt;
 
-    private String role;
+    private String roles;
 
     private String perms;
 
@@ -60,12 +60,12 @@ abstract class AbstractUser {
         this.salt = salt;
     }
 
-    public String getRole() {
-        return role;
+    public String getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(String roles) {
+        this.roles = roles;
     }
 
     public String getPerms() {
