@@ -28,11 +28,11 @@ public class MyShiroRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         String userId = (String) principalCollection.getPrimaryPrincipal();
         //从数据库或者缓存获取角色信息
-//        Set<String> roles = getRolesByUserId(userId);
+        Set<String> roles = getRolesByUserId(userId);
         //从数据库或者缓存获取权限信息
         Set<String> permissions = getPermissionsByUserId(userId);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-//        simpleAuthorizationInfo.setRoles(roles);
+        simpleAuthorizationInfo.setRoles(roles);
         simpleAuthorizationInfo.setStringPermissions(permissions);
         return simpleAuthorizationInfo;
     }
@@ -42,8 +42,7 @@ public class MyShiroRealm extends AuthorizingRealm {
     }
 
     private Set<String> getRolesByUserId(String userId) {
-        List<String> list = userDao.getRolesByUserId(userId);
-        return new HashSet<>(list);
+        return userDao.getRolesByUserId(userId);
     }
 
     /**
@@ -58,8 +57,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         if ("".equals(password)) {
             return null;
         }
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userId,
-                password, "myShiroRealm");
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userId, password, "myShiroRealm");
         //TODO 加盐
 //        authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(userId));
         return authenticationInfo;

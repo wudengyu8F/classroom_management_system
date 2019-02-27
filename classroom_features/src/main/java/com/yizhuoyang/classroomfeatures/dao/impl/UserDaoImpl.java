@@ -46,8 +46,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<String> getRolesByUserId(String userId) {
-
-        return null;
+    public Set<String> getRolesByUserId(String userId) {
+        String sql = "select roles from user where user_id=?";
+        BeanPropertyRowMapper<UserRequest> rowMapper = new BeanPropertyRowMapper<>(UserRequest.class);
+        UserRequest userRequest = jdbcTemplate.queryForObject(sql, rowMapper, userId);
+        String[] split = userRequest.getRoles().split(",");
+        return new HashSet<>(Arrays.asList(split));
     }
 }
