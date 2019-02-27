@@ -4,12 +4,16 @@ import com.yizhuoyang.classroomfeatures.constant.Result;
 import com.yizhuoyang.classroomfeatures.dao.UserDao;
 import com.yizhuoyang.classroomfeatures.domain.UserRequest;
 import com.yizhuoyang.classroomfeatures.service.UserService;
+import com.yizhuoyang.classroomfeatures.component.JedisPoolFactory;
+import com.yizhuoyang.classroomfeatures.util.JedisUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -23,6 +27,12 @@ public class UserDaoImplTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JedisPoolFactory factory;
+
+    @Autowired
+    private JedisUtil jedisUtil;
 
     @Test
     public void test() {
@@ -49,5 +59,12 @@ public class UserDaoImplTest {
         userRequest.setSalt("sadfuwecalsduw");
         Result register = userService.register(userRequest);
         System.out.println(register);
+    }
+
+    @Test
+    public void test4() {
+        JedisPool jedisPool = factory.getJedisPool();
+        Jedis jedis = jedisPool.getResource();
+
     }
 }

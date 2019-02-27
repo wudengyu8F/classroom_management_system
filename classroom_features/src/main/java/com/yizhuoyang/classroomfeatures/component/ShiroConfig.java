@@ -1,7 +1,11 @@
-package com.yizhuoyang.classroomfeatures.shiro;
+package com.yizhuoyang.classroomfeatures.component;
 
+import com.yizhuoyang.classroomfeatures.session.MySessionManager;
+import com.yizhuoyang.classroomfeatures.session.RedisSessionDao;
+import com.yizhuoyang.classroomfeatures.shiro.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -66,11 +70,25 @@ public class ShiroConfig {
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(myShiroRealm());
+        securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
 
+    @Bean("sessionManager")
+    public MySessionManager sessionManager() {
+        MySessionManager mySessionManager = new MySessionManager();
+        mySessionManager.setSessionDAO(redisSessionDao());
+        return mySessionManager;
+    }
+
+    @Bean("redisSessionDao")
+    public RedisSessionDao redisSessionDao() {
+        return new RedisSessionDao();
+    }
+
     @Bean("authorizationAttributeSourceAdvisor")
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("securityManager") SecurityManager securityManager) {
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor
+            (@Qualifier("securityManager") SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
