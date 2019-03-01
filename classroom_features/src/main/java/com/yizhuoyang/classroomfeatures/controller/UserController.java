@@ -1,5 +1,7 @@
 package com.yizhuoyang.classroomfeatures.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.yizhuoyang.classroomfeatures.constant.Result;
 import com.yizhuoyang.classroomfeatures.domain.UserRequest;
 import com.yizhuoyang.classroomfeatures.service.UserService;
@@ -11,6 +13,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,18 +48,24 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "/subLogin", produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public Result subLogin(Model model) {
+        return new Result(0, "未登录");
+    }
+
     @PostMapping(value = "/register", produces = "application/json;charset=utf-8")
     @ResponseBody
     public Result register(UserRequest userRequest) {
         return userService.register(userRequest);
     }
 
-    @RequestMapping("/add")
+    @GetMapping(value = "/add")
     public String getTestPage() {
         return "index";
     }
 
-    @RequestMapping("/test")
+    @GetMapping(value = "/test")
     public String getTest() {
         return "index";
     }
@@ -65,6 +74,20 @@ public class UserController {
     @ResponseBody
     public Result error() {
         return new Result(0, "权限不够");
+    }
+
+    @RequestMapping(value = "/logout")
+    @ResponseBody
+    public Result logout(Model model) {
+//        model.addAttribute("msg", JSONObject.toJSONString(new Result(1, "正常退出")));
+//        return "out";
+        return new Result(1, "正常退出");
+    }
+
+    @RequestMapping(value = "/success")
+    @ResponseBody
+    public Result success() {
+        return new Result(1, "success");
     }
 
     @RequestMapping("/index")

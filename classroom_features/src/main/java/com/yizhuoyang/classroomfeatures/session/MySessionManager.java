@@ -2,14 +2,14 @@ package com.yizhuoyang.classroomfeatures.session;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
-import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.apache.shiro.session.mgt.SessionKey;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.apache.shiro.web.session.mgt.WebSessionKey;
 
 import javax.servlet.ServletRequest;
 import java.io.Serializable;
 
-public class MySessionManager extends DefaultSessionManager {
+public class MySessionManager extends DefaultWebSessionManager {
 
     @Override
     protected Session retrieveSession(SessionKey sessionKey) throws UnknownSessionException {
