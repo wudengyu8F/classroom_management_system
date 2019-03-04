@@ -8,7 +8,7 @@ public class Result {
 
     private String message;
 
-    private Map<Object, Object> data;
+    private Object data;
 
     public int getCode() {
         return code;
@@ -26,11 +26,11 @@ public class Result {
         this.message = message;
     }
 
-    public Map<Object, Object> getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(Map<Object, Object> data) {
+    public void setData(Object data) {
         this.data = data;
     }
 
@@ -39,7 +39,7 @@ public class Result {
         this.message = message;
     }
 
-    public Result(int code, String message, Map<Object, Object> data) {
+    public Result(int code, String message, Object data) {
         this.code = code;
         this.message = message;
         this.data = data;

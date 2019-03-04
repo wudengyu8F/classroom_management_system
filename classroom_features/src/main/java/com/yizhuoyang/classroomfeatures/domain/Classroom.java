@@ -3,7 +3,7 @@ package com.yizhuoyang.classroomfeatures.domain;
 /**
  * 教室
  */
-public class ClassRoom {
+public class Classroom {
 
     /**
      * id

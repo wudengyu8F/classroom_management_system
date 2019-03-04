@@ -3,6 +3,8 @@ package com.yizhuoyang.classroomfeatures.dao.impl;
 import com.yizhuoyang.classroomfeatures.dao.UserDao;
 import com.yizhuoyang.classroomfeatures.domain.UserRequest;
 import org.apache.shiro.crypto.hash.Md5Hash;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import java.util.*;
 @Component
 public class UserDaoImpl implements UserDao {
 
+    private static Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+
     @Resource
     private JdbcTemplate jdbcTemplate;
 
@@ -24,15 +28,16 @@ public class UserDaoImpl implements UserDao {
         try {
             return Objects.requireNonNull(jdbcTemplate.queryForObject(sql, rowMapper, userId)).getPassword();
         } catch (EmptyResultDataAccessException e) {
+            logger.error(e.getMessage());
             return "";
         }
     }
 
     @Override
     public int register(UserRequest userRequest) {
-        String sql = "insert into user (user_id,username,password,sex,salt) values(?,?,?,?,?)";
+        String sql = "insert into user (user_id,username,password,sex) values(?,?,?,?)";
         Md5Hash md5Hash = new Md5Hash(userRequest.getPassword());
-        Object[] args = {userRequest.getUserId(), userRequest.getUsername(), md5Hash.toString(), userRequest.isSex() ? 1 : 0, userRequest.getSalt()};
+        Object[] args = {userRequest.getUserId(), userRequest.getUsername(), md5Hash.toString(), userRequest.isSex() ? 1 : 0};
         return jdbcTemplate.update(sql, args);
     }
 
@@ -41,7 +46,7 @@ public class UserDaoImpl implements UserDao {
         String sql = "select perms from user where user_id=?";
         BeanPropertyRowMapper<UserRequest> rowMapper = new BeanPropertyRowMapper<>(UserRequest.class);
         UserRequest userRequest = jdbcTemplate.queryForObject(sql, rowMapper, userId);
-        String[] split = userRequest.getPerms().split(",");
+        String[] split = Objects.requireNonNull(userRequest).getPerms().split(",");
         return new HashSet<>(Arrays.asList(split));
     }
 
@@ -50,7 +55,7 @@ public class UserDaoImpl implements UserDao {
         String sql = "select roles from user where user_id=?";
         BeanPropertyRowMapper<UserRequest> rowMapper = new BeanPropertyRowMapper<>(UserRequest.class);
         UserRequest userRequest = jdbcTemplate.queryForObject(sql, rowMapper, userId);
-        String[] split = userRequest.getRoles().split(",");
+        String[] split = Objects.requireNonNull(userRequest).getRoles().split(",");
         return new HashSet<>(Arrays.asList(split));
     }
 }

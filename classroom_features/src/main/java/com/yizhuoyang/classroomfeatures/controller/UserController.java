@@ -1,7 +1,5 @@
 package com.yizhuoyang.classroomfeatures.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.yizhuoyang.classroomfeatures.constant.Result;
 import com.yizhuoyang.classroomfeatures.domain.UserRequest;
 import com.yizhuoyang.classroomfeatures.service.UserService;
@@ -13,7 +11,6 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +47,7 @@ public class UserController {
 
     @GetMapping(value = "/subLogin", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Result subLogin(Model model) {
+    public Result subLogin() {
         return new Result(0, "未登录");
     }
 
@@ -78,9 +75,7 @@ public class UserController {
 
     @RequestMapping(value = "/logout")
     @ResponseBody
-    public Result logout(Model model) {
-//        model.addAttribute("msg", JSONObject.toJSONString(new Result(1, "正常退出")));
-//        return "out";
+    public Result logout() {
         return new Result(1, "正常退出");
     }
 

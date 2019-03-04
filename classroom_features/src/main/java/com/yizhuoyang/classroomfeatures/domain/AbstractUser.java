@@ -13,8 +13,6 @@ abstract class AbstractUser {
      */
     private boolean sex;
 
-    private String salt;
-
     private String roles;
 
     private String perms;
@@ -50,14 +48,6 @@ abstract class AbstractUser {
 
     public void setSex(boolean sex) {
         this.sex = sex;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 
     public String getRoles() {
