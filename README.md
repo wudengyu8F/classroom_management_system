@@ -19,6 +19,17 @@
 7. 教室的预约：教师和学生角色都可以对教室进行预约，进入预约界面以后填写预约的时间，预约的时长，预约的申请理由，自动生成预约的教室（是从教室详情页面跳转过来的）。
 
 ### 实现
+
+返回值信息：
+
+0表示未登录，data为空，message为错误信息;
+1表示成功，data为空，message为success;
+-1表示失败，data为空，message为错误信息;
+2表示用户名不存在，data为空，message为错误信息;
+3表示密码错误，data为空，message为错误信息;
+4表示权限不够，data为空，message为错误信息;
+
+
 1. 注册页面
 ```
 姓名：****
@@ -29,7 +40,6 @@
 request：{"username":"zhangsan","studentId":"0515****","password":"123456","sex":"0","salt":"asldfuwannsddfawu"},
 
 response:{"code":1,"message":"success","data":""}
-1表示成功，data为空，message为success;0表示失败，data为空，message为错误信息
 
 2. 登录页面
 ```

@@ -19,6 +19,12 @@ public class ClassroomController {
         this.classroomService = classroomService;
     }
 
+    @RequestMapping(value = "getTeachingBuilding")
+    @ResponseBody
+    public Result getTeachingBuilding(){
+        return classroomService.getTeachingBuilding();
+    }
+
     @RequestMapping(value = "getRoomList")
     @ResponseBody
     public Result getClassroomDetails() {

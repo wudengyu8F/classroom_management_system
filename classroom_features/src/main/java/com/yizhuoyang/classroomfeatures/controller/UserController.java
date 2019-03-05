@@ -38,10 +38,10 @@ public class UserController {
             return new Result(1, "success");
         } catch (UnknownAccountException e) {
             //登录失败，用户名不存在
-            return new Result(0, "用户名不存在");
+            return new Result(2, "用户名不存在");
         } catch (IncorrectCredentialsException e) {
             //登录失败：密码错误
-            return new Result(-1, "密码错误");
+            return new Result(3, "密码错误");
         }
     }
 
@@ -70,7 +70,7 @@ public class UserController {
     @GetMapping(value = "/error", produces = "application/json;charset=utf-8")
     @ResponseBody
     public Result error() {
-        return new Result(0, "权限不够");
+        return new Result(4, "权限不够");
     }
 
     @RequestMapping(value = "/logout")
