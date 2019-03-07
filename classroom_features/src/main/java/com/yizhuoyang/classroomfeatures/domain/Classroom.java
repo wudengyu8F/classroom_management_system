@@ -9,26 +9,31 @@ public class Classroom {
      * id
      */
     private int id;
+
+    /**
+     * 教学楼
+     */
+    private String teachingBuilding;
+
     /**
      * 教室编号
      */
     private int roomNumber;
+
     /**
      * 教室位置
      */
     private String roomLocal;
+
     /**
      * 教室座位数量
      */
     private int seatsNumber;
+
     /**
      * 教室器材信息
      */
     private String multimediaEquipment;
-    /**
-     * 教室是否被预约
-     */
-    private int isAppointment;
 
     public int getId() {
         return id;
@@ -36,6 +41,14 @@ public class Classroom {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getTeachingBuilding() {
+        return teachingBuilding;
+    }
+
+    public void setTeachingBuilding(String teachingBuilding) {
+        this.teachingBuilding = teachingBuilding;
     }
 
     public int getRoomNumber() {
@@ -70,11 +83,15 @@ public class Classroom {
         this.multimediaEquipment = multimediaEquipment;
     }
 
-    public int getIsAppointment() {
-        return isAppointment;
-    }
-
-    public void setIsAppointment(int isAppointment) {
-        this.isAppointment = isAppointment;
+    @Override
+    public String toString() {
+        return "Classroom{" +
+                "id=" + id +
+                ", teachingBuilding='" + teachingBuilding + '\'' +
+                ", roomNumber=" + roomNumber +
+                ", roomLocal='" + roomLocal + '\'' +
+                ", seatsNumber=" + seatsNumber +
+                ", multimediaEquipment='" + multimediaEquipment + '\'' +
+                '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.yizhuoyang.classroomfeatures.dao.impl;
 
+import com.yizhuoyang.classroomfeatures.dao.AbstractDao;
 import com.yizhuoyang.classroomfeatures.dao.UserDao;
 import com.yizhuoyang.classroomfeatures.domain.UserRequest;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -14,12 +15,12 @@ import javax.annotation.Resource;
 import java.util.*;
 
 @Component
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends AbstractDao implements UserDao {
 
-    private static Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
-
-    @Resource
-    private JdbcTemplate jdbcTemplate;
+//    private static Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+//
+//    @Resource
+//    private JdbcTemplate jdbcTemplate;
 
     @Override
     public String getPasswordByUserId(String userId) {
