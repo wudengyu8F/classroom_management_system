@@ -39,7 +39,7 @@ public class ClassScheduleService {
                 }
             }
             return respRooms;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
         }

@@ -2,7 +2,6 @@ package com.yizhuoyang.classroomfeatures.dao;
 
 import com.yizhuoyang.classroomfeatures.domain.UserRequest;
 
-import java.util.List;
 import java.util.Set;
 
 public interface UserDao {

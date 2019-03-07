@@ -1,5 +1,6 @@
 package com.yizhuoyang.classroomfeatures.service;
 
+import com.yizhuoyang.classroomfeatures.constant.Result;
 import com.yizhuoyang.classroomfeatures.controller.ClassroomController;
 import com.yizhuoyang.classroomfeatures.dao.ReservationDao;
 import com.yizhuoyang.classroomfeatures.domain.ReservationInfo;
@@ -46,10 +47,27 @@ public class ReservationService {
                 }
             }
             return respRooms;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return null;
         }
 
+    }
+
+    public Result insertInfo(ReservationInfo reservationInfo) {
+        if (reservationInfo == null) {
+            return new Result(0, "fail");
+        }
+        try {
+            boolean flag = reservationDao.insertInfo(reservationInfo);
+            if (flag) {
+                return new Result(1, "success");
+            } else {
+                return new Result(0, "fail");
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return new Result(0, "fail");
+        }
     }
 }

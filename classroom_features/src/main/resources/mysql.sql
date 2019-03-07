@@ -41,7 +41,7 @@ username varchar(20) DEFAULT '0' COMMENT '预约用户姓名',
 reservation_desc varchar(50) default '0' comment '预约理由描述',
 is_pass tinyint(1) default '0' comment '是否通过(0:未通过;1:通过)',
 primary key (id),
-unique key `uniq` (room_id,date,user_id),
+unique key `uniq` (room_id,date,user_id,time),
 key `user_search` (user_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='预约信息表';
 

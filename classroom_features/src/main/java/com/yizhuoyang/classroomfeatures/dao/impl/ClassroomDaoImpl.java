@@ -5,14 +5,13 @@ import com.yizhuoyang.classroomfeatures.dao.ClassroomDao;
 import com.yizhuoyang.classroomfeatures.domain.Classroom;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Component
 public class ClassroomDaoImpl extends AbstractDao implements ClassroomDao {
 
     @Override
-    public List<Classroom> getClassroomDetails() throws SQLException {
+    public List<Classroom> getClassroomDetails() throws Exception {
         String sql = "select * from classroom";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Classroom classroom = new Classroom();
@@ -26,7 +25,7 @@ public class ClassroomDaoImpl extends AbstractDao implements ClassroomDao {
     }
 
     @Override
-    public Classroom getRoomDetailById(Integer id) throws SQLException {
+    public Classroom getRoomDetailById(Integer id) throws Exception {
         String sql = "select id,teaching_building,room_number from classroom where id=?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, i) -> {
             Classroom classroom = new Classroom();
@@ -38,13 +37,13 @@ public class ClassroomDaoImpl extends AbstractDao implements ClassroomDao {
     }
 
     @Override
-    public List<String> getTeachingBuilding() {
+    public List<String> getTeachingBuilding() throws Exception{
         String sql = "select teaching_building from classroom";
         return jdbcTemplate.queryForList(sql, String.class);
     }
 
     @Override
-    public List<Classroom> getRoomByIdAndSize(String teachingBuilding, Integer size) {
+    public List<Classroom> getRoomByIdAndSize(String teachingBuilding, Integer size) throws Exception{
         StringBuilder sql = new StringBuilder("select * from classroom");
         if (size != 0) {
             if ("0".equals(teachingBuilding)) {

@@ -1,14 +1,10 @@
 package com.yizhuoyang.classroomfeatures.service;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.yizhuoyang.classroomfeatures.constant.Result;
 import com.yizhuoyang.classroomfeatures.controller.ClassroomController;
 import com.yizhuoyang.classroomfeatures.dao.ClassroomDao;
-import com.yizhuoyang.classroomfeatures.domain.ClassSchedule;
 import com.yizhuoyang.classroomfeatures.domain.Classroom;
-import com.yizhuoyang.classroomfeatures.domain.ReservationInfo;
 import com.yizhuoyang.classroomfeatures.domain.RespRoom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +73,13 @@ public class ClassroomService {
 
     public Result getRoomDetailByIdAndDate(Integer id, Integer date) {
         try {
-            Classroom classroom = classroomDao.getRoomDetailById(id);
+            Classroom classroom = null;
+            try {
+                classroom = classroomDao.getRoomDetailById(id);
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                return new Result(0, "fail");
+            }
             List<RespRoom> classScheduleData = classScheduleService.getClassScheduleByIdAndDate(id, date);
             List<RespRoom> reservationData = reservationService.getReservationByRoomIdAndDate(id, date);
             if (classScheduleData == null) {
@@ -90,7 +92,7 @@ public class ClassroomService {
             object.put("classroom", JSONObject.toJSON(classroom));
             object.put("status", classScheduleData);
             return new Result(1, "success", object);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return new Result(0, "fail");
         }
