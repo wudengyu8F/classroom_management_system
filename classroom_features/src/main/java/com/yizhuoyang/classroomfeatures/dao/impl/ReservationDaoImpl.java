@@ -12,11 +12,11 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
 
     @Override
     public List<ReservationInfo> getReservationByRoomIdAndDate(Integer id, int date) throws Exception {
-        String sql = "select time,is_pass from reservation_info where room_id=? and date=?";
+        String sql = "select time,is_pass from reservation_info where room_id=? and date=? and is_pass<2";
         return jdbcTemplate.query(sql, new Object[]{id, date}, (rs, i) -> {
             ReservationInfo reservationInfo = new ReservationInfo();
             reservationInfo.setTime(rs.getInt("time"));
-            reservationInfo.setPass(rs.getBoolean("is_pass"));
+            reservationInfo.setIsPass(rs.getInt("is_pass"));
             return reservationInfo;
         });
     }
@@ -27,5 +27,61 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
         int update = jdbcTemplate.update(sql, reservationInfo.getRoomId(), reservationInfo.getDate(), reservationInfo.getTime(), reservationInfo.getUserId(), reservationInfo.getUserName(),
                 reservationInfo.getReservationDesc());
         return update == 1;
+    }
+
+    @Override
+    public List<ReservationInfo> getStudentRSVById(Integer uid) throws Exception {
+        String sql = "select r.id as id,c.teaching_building as teaching_building,c.room_number as room_number,\n" +
+                "r.date as date,r.time as time,r.is_pass as is_pass\n" +
+                "from reservation_info r,classroom c\n" +
+                "where r.user_id = ? and r.room_id=c.id and r.is_pass<2\n" +
+                "order by r.time desc;";
+        return jdbcTemplate.query(sql, new Object[]{uid}, (rs, i) -> {
+            ReservationInfo reservationInfo = new ReservationInfo();
+            reservationInfo.setId(rs.getInt("id"));
+            reservationInfo.setTeachingBuilding(rs.getString("teaching_building"));
+            reservationInfo.setIsPass(rs.getInt("is_pass"));
+            reservationInfo.setTime(rs.getInt("time"));
+            reservationInfo.setDate(rs.getInt("date"));
+            reservationInfo.setRoomNumber(rs.getInt("room_number"));
+            return reservationInfo;
+        });
+    }
+
+    @Override
+    public int cancelApplication(Integer id) throws Exception {
+        String sql = "delete from reservation_info where id=?";
+        return jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public List<ReservationInfo> getApprovalDetail(Integer date) throws Exception {
+        String sql = "select r.id as id,c.teaching_building as teaching_building,c.room_number as room_number,\n" +
+                "r.date as date,r.time as time,r.username as username,r.reservation_desc as reservation_desc \n" +
+                "from reservation_info r,classroom c\n" +
+                "where r.date=? and r.room_id=c.id and r.is_pass=0;";
+        return jdbcTemplate.query(sql, new Object[]{date}, (rs, i) -> {
+            ReservationInfo reservationInfo = new ReservationInfo();
+            reservationInfo.setId(rs.getInt("id"));
+            reservationInfo.setRoomNumber(rs.getInt("room_number"));
+            reservationInfo.setDate(rs.getInt("date"));
+            reservationInfo.setTeachingBuilding(rs.getString("teaching_building"));
+            reservationInfo.setTime(rs.getInt("time"));
+            reservationInfo.setUserName(rs.getString("username"));
+            reservationInfo.setReservationDesc(rs.getString("reservation_desc"));
+            return reservationInfo;
+        });
+    }
+
+    @Override
+    public int approvalOperation(Integer id, Integer ope, String desc) throws Exception {
+        String sql;
+        if ("".equals(desc)) {
+            sql = "update reservation_info set is_pass=? where id=?";
+            return jdbcTemplate.update(sql, ope, id);
+        } else {
+            sql = "update reservation_info set is_pass=?,reject_desc=? where id=?";
+            return jdbcTemplate.update(sql, ope, desc, id);
+        }
     }
 }

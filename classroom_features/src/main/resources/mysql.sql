@@ -8,7 +8,7 @@ roles varchar(30) DEFAULT 'student' COMMENT '角色(student;teacher;admin)',
 perms varchar(30) DEFAULT 'user:search' COMMENT '权限(相互的权限以逗号分隔user:search;user:update)',
 PRIMARY KEY (id),
 UNIQUE KEY `uniq` (user_id),
-UNIQUE KEY `search_key` (user_id,password)
+KEY `search_key` (user_id,password)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 insert into user (user_id,username,password,sex) value (10000111,"zhangsan","E10ADC3949BA59ABBE56E057F20F883E",0),
@@ -38,8 +38,9 @@ date int(8) unsigned NOT NULL DEFAULT '0' COMMENT '预约日期(20181205)',
 time int(1) unsigned not null default '0' comment '预约时间(1:1.2节;2:3.4节;3:5.6节;4:7.8节;5:9.10节)',
 user_id int(11) unsigned NOT NULL DEFAULT '0' COMMENT '预约用户学号',
 username varchar(20) DEFAULT '0' COMMENT '预约用户姓名',
-reservation_desc varchar(50) default '0' comment '预约理由描述',
-is_pass tinyint(1) default '0' comment '是否通过(0:未通过;1:通过)',
+reservation_desc varchar(50) default '' comment '预约理由描述',
+is_pass int(1) default '0' comment '是否通过(0:未通过;1:通过;2:取消申请)',
+reject_desc varchar(50) default '不同意' comment '驳回理由',
 primary key (id),
 unique key `uniq` (room_id,date,user_id,time),
 key `user_search` (user_id)

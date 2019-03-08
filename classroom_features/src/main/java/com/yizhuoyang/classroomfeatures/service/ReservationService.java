@@ -1,5 +1,6 @@
 package com.yizhuoyang.classroomfeatures.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.yizhuoyang.classroomfeatures.constant.Result;
 import com.yizhuoyang.classroomfeatures.controller.ClassroomController;
 import com.yizhuoyang.classroomfeatures.dao.ReservationDao;
@@ -11,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class ReservationService {
             List<ReservationInfo> info = reservationDao.getReservationByRoomIdAndDate(id, date);
             int[] res = new int[6];
             for (ReservationInfo r : info) {
-                if (r.isPass()) {
+                if (r.getIsPass() == 1) {
                     res[r.getTime()] = 2;
                 } else {
                     res[r.getTime()] = 1;
@@ -61,6 +61,57 @@ public class ReservationService {
         try {
             boolean flag = reservationDao.insertInfo(reservationInfo);
             if (flag) {
+                return new Result(1, "success");
+            } else {
+                return new Result(0, "fail");
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return new Result(0, "fail");
+        }
+    }
+
+    public Result getStudentRSVById(Integer uid) {
+        try {
+            List<ReservationInfo> details = reservationDao.getStudentRSVById(uid);
+            return new Result(1, "success", JSONObject.toJSONString(details));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return new Result(0, "fail");
+        }
+    }
+
+    public Result cancelApplication(Integer id) {
+        try {
+            int res = reservationDao.cancelApplication(id);
+            if (res == 1) {
+                return new Result(1, "success");
+            } else {
+                return new Result(0, "fail");
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return new Result(0, "fail");
+        }
+    }
+
+    public Result getApprovalDetail(Integer date) {
+        if (date == 0) {
+            date = Utils.getDate();
+        }
+        try {
+            List<ReservationInfo> details = reservationDao.getApprovalDetail(date);
+            return new Result(1, "success", JSONObject.toJSONString(details));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return new Result(0, "fail");
+        }
+    }
+
+    public Result approvalOperation(Integer id, Integer ope, String desc) {
+        try {
+            int res = reservationDao.approvalOperation(id, ope, desc);
+            if (res == 1) {
                 return new Result(1, "success");
             } else {
                 return new Result(0, "fail");

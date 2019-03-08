@@ -27,9 +27,9 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 
     @Override
     public int register(UserRequest userRequest) {
-        String sql = "insert into user (user_id,username,password,sex) values(?,?,?,?)";
+        String sql = "insert into user (user_id,username,password,sex,roles,perms) values(?,?,?,?,?,?)";
         Md5Hash md5Hash = new Md5Hash(userRequest.getPassword());
-        Object[] args = {userRequest.getUserId(), userRequest.getUsername(), md5Hash.toString(), userRequest.isSex() ? 1 : 0};
+        Object[] args = {userRequest.getUserId(), userRequest.getUsername(), md5Hash.toString(), userRequest.isSex(), userRequest.getRoles(), userRequest.getPerms()};
         return jdbcTemplate.update(sql, args);
     }
 

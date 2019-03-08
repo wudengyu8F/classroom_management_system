@@ -11,10 +11,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/login")
@@ -27,9 +24,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/subLogin", produces = "application/json;charset=utf-8")
+    @PostMapping(value = "/subLogin")
     @ResponseBody
-    public Result subLogin(UserRequest userRequest) {
+    public Result subLogin(@RequestBody UserRequest userRequest) {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(Integer.toString(userRequest.getUserId()), userRequest.getPassword());
         try {
@@ -45,48 +42,49 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/subLogin", produces = "application/json;charset=utf-8")
+    @GetMapping(value = "/subLogin")
     @ResponseBody
     public Result subLogin() {
         return new Result(0, "未登录");
     }
 
-    @PostMapping(value = "/register", produces = "application/json;charset=utf-8")
+    @PostMapping(value = "/register")
     @ResponseBody
-    public Result register(UserRequest userRequest) {
+    public Result register(@RequestBody UserRequest userRequest) {
         return userService.register(userRequest);
     }
 
-    @GetMapping(value = "/add")
-    public String getTestPage() {
-        return "index";
-    }
+//    权限和角色测试
+//    @GetMapping(value = "/add")
+//    public String getTestPage() {
+//        return "index";
+//    }
+//
+//    @GetMapping(value = "/test")
+//    public String getTest() {
+//        return "index";
+//    }
 
-    @GetMapping(value = "/test")
-    public String getTest() {
-        return "index";
-    }
-
-    @GetMapping(value = "/error", produces = "application/json;charset=utf-8")
+    @GetMapping(value = "/error")
     @ResponseBody
     public Result error() {
         return new Result(4, "权限不够");
     }
 
-    @RequestMapping(value = "/logout")
-    @ResponseBody
-    public Result logout() {
-        return new Result(1, "正常退出");
-    }
+//    @GetMapping(value = "/logout")
+//    @ResponseBody
+//    public Result logout() {
+//        return new Result(1, "正常退出");
+//    }
 
-    @RequestMapping(value = "/success")
-    @ResponseBody
-    public Result success() {
-        return new Result(1, "success");
-    }
+//    @GetMapping(value = "/success")
+//    @ResponseBody
+//    public Result success() {
+//        return new Result(1, "登录成功");
+//    }
 
-    @RequestMapping("/index")
-    public String toIndex() {
-        return "index";
-    }
+//    @GetMapping("/index")
+//    public String toIndex() {
+//        return "index";
+//    }
 }

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class ClassroomService {
             return new Result(1, "success", JSONObject.toJSONString(list));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(0, "fail");
+            return new Result(-1, "fail");
         }
     }
 
@@ -55,7 +54,7 @@ public class ClassroomService {
             return new Result(1, "success", JSONObject.toJSONString(list));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(0, "fail");
+            return new Result(-1, "fail");
         }
     }
 
@@ -66,7 +65,7 @@ public class ClassroomService {
             return new Result(1, "success", JSONObject.toJSONString(strings));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(0, "fail");
+            return new Result(-1, "fail");
         }
     }
 
@@ -78,12 +77,12 @@ public class ClassroomService {
                 classroom = classroomDao.getRoomDetailById(id);
             } catch (Exception e) {
                 logger.error(e.getMessage());
-                return new Result(0, "fail");
+                return new Result(-1, "fail");
             }
             List<RespRoom> classScheduleData = classScheduleService.getClassScheduleByIdAndDate(id, date);
             List<RespRoom> reservationData = reservationService.getReservationByRoomIdAndDate(id, date);
             if (classScheduleData == null) {
-                return new Result(0, "fail");
+                return new Result(-1, "fail");
             }
             if (reservationData != null) {
                 classScheduleData.addAll(reservationData);
@@ -94,7 +93,7 @@ public class ClassroomService {
             return new Result(1, "success", object);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(0, "fail");
+            return new Result(-1, "fail");
         }
 
 

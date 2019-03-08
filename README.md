@@ -1,54 +1,230 @@
 # classroom_management_system
 ## 项目概述
-通过qrcode model创建出一个本项目的url地址，通过扫描二维码进入本项目页面。
+项目通过一个开放的二维码作为系统的入口，通过手机扫描二维码进入系统。本系统使用shiro作为权限控制，将用户和超级用户分来。项目实现了普通用户的教室查询、教室预约、自我预约浏览等功能，超级用户拥有预约的审批权限，可以对普通用户的预约进行审批。
 
-实现的功能：
-1. 二维码扫描进入系统
-2. 教室的查询 （显示出教室所处的位置信息，教室中的座位数量，多媒体教室的器材物品，教室的预约情况，教室的预约功能）
-3. 教室的借用 （教室的预约排队借用和空闲教室的直接借用）
-4. 临时借用教室的网上预约和审批 （网上预约功能，预约需要联系的审批人等等）
-5. 角色模块 （使用者和管理者   使用者仅仅可以使用教室的查询和预约功能，管理者除了以上功能外还可以进行预约流程的审批）
-
-具体实现：
-1. 首页展示欢迎界面。顶部有登录注册按钮--> 登录页面和注册界面。中间有三个按键，教室查询，教室借用，如果为管理员则展示出教室的审批按键；
-2. 登录界面登陆以后再次跳转到欢迎界面，让用户再次选择；如果登录界面是从其他界面跳转过来的，则跳转到上次跳转过来的页面；
-3. 教室查询界面：进入查询界面后，会有几个搜索模块，第一个是教室号，如果不输入默认为显示所有，如果输入则显示输入的教室信息；第二个为查询时间：进行一个时间的选取，选定到某一天则显示出某一天的教室情况；可以通过教室号和时间进行联合查询，如果不输入和默认显示当天的；显示的结果以表格信息展示，可以进行显示信息的分页展示功能，如果没有则给用户进行主观反馈。（预约功能只支持7天内的预约）
-4. 教室详情页面：根据上面的页面进行该页面的跳转，展示出具体教室的详情，比如教室的座位数量，教室的信息等等；该页面可以根据时间进行本教室的占用信息进行显示，默认显示当天的，可以进行本日到7天后的教室占用信息的查询；教室应该还排有上课时间，所以显示的除了上课，还有显示张三占用2019-02-17 12：00 - 2019-02-17 13：00.
-5. 教室借用：显示教室借用界面，进行教室的搜索，然后进入教室的预约界面，预约界面根据不同的用户角色进行区分。如果是普通用户，则显示教室的被预约信息；如果是老师，则显示预约申请进行审批；（教室的占用最小时长为一个小时）
-6. 教室的审批：教师角色登录到审批界面进行教室的审批，可以选择审批通过和不通过；
-7. 教室的预约：教师和学生角色都可以对教室进行预约，进入预约界面以后填写预约的时间，预约的时长，预约的申请理由，自动生成预约的教室（是从教室详情页面跳转过来的）。
-
-### 实现
+### 接口：
 
 返回值信息：
 
-0表示未登录，data为空，message为错误信息;
-1表示成功，data为空，message为success;
--1表示失败，data为空，message为错误信息;
-2表示用户名不存在，data为空，message为错误信息;
-3表示密码错误，data为空，message为错误信息;
-4表示权限不够，data为空，message为错误信息;
+| code | data | massage | express |
+| ------ | ------ | ------ | -----|
+|  -1  |  ""  | 错误信息 |  失败   |
+|  0   |  ""  | 错误信息 | 未登录  |
+|  1   |  返回结果  | 错误信息 |  成功   |
+|  2   |  ""  | 错误信息 |用户名不存在|
+|  3   |  ""  | 错误信息 |密码错误 |
+|  4   |  ""  | 错误信息 |权限不够 |
 
 
-1. 注册页面
-```
-姓名：****
-学号：****
-密码：****
-性别：***
-```
-request：{"username":"zhangsan","studentId":"0515****","password":"123456","sex":"0","salt":"asldfuwannsddfawu"},
+#### 注册
+Method: POST
 
-response:{"code":1,"message":"success","data":""}
-
-2. 登录页面
-```
-学号：****
-密码：****
-是否记住：****
+URL: /login/register   
 
 ```
-request：{"studentId":"0515****","password":"123456","rememberMe":true}
+body:
+{
+	"userId":100000,
+	"username":"wangwu",
+	"password":"123456",
+	"sex":true,
+	"roles":"student",
+	"perms":" user:add"
+}
 
-response:{"code":1,"message":"success","data":""}
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": null
+}
+```
 
+#### 登录
+Method: POST
+
+URL: /login/subLogin
+
+```
+body:
+{
+	"userId": 10000111,
+	"password": "123456",
+	"rememberMe": false
+}
+
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": null
+}
+```
+
+#### 退出
+Method: GET
+
+URL: /login/logout
+
+```
+response:
+{
+    "code": 0,
+    "message": "未登录",
+    "data": null
+}
+```
+
+#### 教室查询页面加载
+Method: GET
+
+URL: /cls/getRoomList
+
+```
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": "[{\"id\":1,\"roomLocal\":\"东南角\",\"roomNumber\":1,\"seatsNumber\":120,\"teachingBuilding\":\"教1\"},
+                {\"id\":2,\"roomLocal\":\"东南角\",\"roomNumber\":2,\"seatsNumber\":120,\"teachingBuilding\":\"教1\"},
+                {\"id\":3,\"roomLocal\":\"东南角\",\"roomNumber\":3,\"seatsNumber\":90,\"teachingBuilding\":\"教1\"},
+                {\"id\":4,\"roomLocal\":\"东北角\",\"roomNumber\":1,\"seatsNumber\":90,\"teachingBuilding\":\"教2\"},
+                {\"id\":5,\"roomLocal\":\"东北角\",\"roomNumber\":2,\"seatsNumber\":120,\"teachingBuilding\":\"教2\"}]"
+}
+```
+
+#### 获得教学楼信息
+Method: GET
+
+URL: /cls/getTeachingBuilding
+
+```
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": "[\"教1\",\"教2\"]"
+}
+```
+
+#### 通过条件获得教室信息
+Method: GET
+
+URL: /cls/getRoomByTIdAndSize
+
+```
+request:
+teachingBuilding=0 (获得全部给0，具体的给具体教学楼id)
+
+size=2 (获得全部给0,大于120座给1，小于120座给2)
+
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": "[{\"id\":3,\"roomLocal\":\"东南角\",\"roomNumber\":3,\"seatsNumber\":90,\"teachingBuilding\":\"教1\"},
+                {\"id\":4,\"roomLocal\":\"东北角\",\"roomNumber\":1,\"seatsNumber\":90,\"teachingBuilding\":\"教2\"}]"
+}
+```
+
+#### 获得具体教室信息
+Method: GET
+
+URL: /cls/getRoomDetailById
+
+```
+request:
+id=1 (数据库教室表中的主键)
+
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": {
+        "classroom": {
+            "seatsNumber": 120,
+            "roomLocal": null,
+            "roomNumber": 1,
+            "teachingBuilding": "教1",
+            "id": 1,
+            "multimediaEquipment": "电脑，投影仪"
+        },
+        "status": [
+            {
+                "time": 1,
+                "status": "上课"
+            },
+            {
+                "time": 3,
+                "status": "上课"
+            },
+            {
+                "time": 5,
+                "status": "上课"
+            },
+            {
+                "time": 4,
+                "status": "排队"
+            }
+        ]
+    }
+}
+```
+
+#### 通过时间获得具体教室信息
+Method: GET
+
+URL: /cls/getRoomDetailByIdAndDate
+
+```
+request:
+id=1 (数据库教室表中的主键)
+date=20190306
+
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": {
+        "classroom": {
+            "seatsNumber": 120,
+            "roomLocal": null,
+            "roomNumber": 1,
+            "teachingBuilding": "教1",
+            "id": 1,
+            "multimediaEquipment": "电脑，投影仪"
+        },
+        "status": [
+            {
+                "time": 1,
+                "status": "上课"
+            },
+            {
+                "time": 3,
+                "status": "上课"
+            },
+            {
+                "time": 5,
+                "status": "上课"
+            },
+            {
+                "time": 4,
+                "status": "排队"
+            }
+        ]
+    }
+}
+```
+
+
+
+## 项目重点
+1. 根据项目的地址生成二维码的入口。
+2. 开发项目的接口供外网访问。
+3. 教室的上课，预约逻辑是需要梳理清楚的，如果在程序中进行该逻辑的实现。
+4. 数据库的设计，如何在满足数据库设计原则的基础上使用更简洁的库来支持项目功能。
+
+## 项目难点
+1. 需要使用ngrok将内外网进行一个穿透，使项目可以通过外网访问。
+2. 数据库设计，需要尽量的满足数据的设计原则，并且数据库之间减少耦合。
+3. 预约的逻辑实现是有多种多样的，本项目增加了难度，加入了课表系统，这使得本系统更基于现实情况。在此种情况下来实现预约是需要做大量的逻辑处理的。

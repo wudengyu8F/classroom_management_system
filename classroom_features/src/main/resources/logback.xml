@@ -2,9 +2,7 @@
 
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <property name="FS" value="${file.separator:-/}" />
     <!--<property name="DEFAULT_LOG_PATH" value="${catalina.base:-${user.dir:-.}}${FS}log${FS}${CONTEXT_NAME}" />-->
-    <property name="DEFAULT_LOG_PATH" value="${catalina.base:-${user.dir:-.}}log${FS}${CONTEXT_NAME}" />
     <property name="CONTEXT_NAME" value="log"/>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
