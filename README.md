@@ -216,7 +216,102 @@ response:
 }
 ```
 
+#### 预约页面申请预约
+Method: POST
 
+URL: /rsv/insertInfo
+
+```
+request:
+body:
+{
+	"roomId": 1,
+	"date": 20190306,
+	"time": 3,
+	"userId": 10000111,
+	"userName": "zhangsan",
+	"reservationDesc": "计算机协会又来了"
+}
+
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": null
+}
+```
+
+#### 学生预约界面
+Method: GET
+
+URL: /rsv/getStudentRSVById
+
+```
+request:
+
+uid=10000111
+
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": "[{\"date\":20190306,\"id\":1,\"isPass\":0,\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0},{\"date\":20190306,\"id\":3,\"isPass\":0,\"roomId\":0,\"roomNumber\":2,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0},{\"date\":20190306,\"id\":5,\"isPass\":0,\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":3,\"userId\":0}]"
+}
+```
+
+#### 学生预约界面取消申请操作
+Method: GET
+
+URL: /rsv/cancelApplication
+
+```
+request:
+id=1
+
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": null
+}
+```
+
+#### 审批界面
+Method: GET
+
+URL: /rsv/getApprovalDetail
+
+```
+request:
+
+date=20190306
+
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": "[{\"date\":20190306,\"id\":1,\"isPass\":0,\"reservationDesc\":\"计算机协会活动\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"zhangsan\"},{\"date\":20190306,\"id\":2,\"isPass\":0,\"reservationDesc\":\"欢乐时光\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"lisi\"},{\"date\":20190306,\"id\":3,\"isPass\":0,\"reservationDesc\":\"计算机协会活动\",\"roomId\":0,\"roomNumber\":2,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"zhangsan\"},{\"date\":20190306,\"id\":5,\"isPass\":0,\"reservationDesc\":\"计算机协会又来了\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":3,\"userId\":0,\"userName\":\"zhangsan\"}]"
+}
+```
+
+#### 审批界面操作
+Method: GET
+
+URL: /rsv/approvalOperation
+
+```
+request:
+id=4&ope=2&desc=驳回
+id=4&ope=1&desc=同意
+
+
+response:
+{
+    "code": 1,
+    "message": "success",
+    "data": null
+}
+```
 
 ## 项目重点
 1. 根据项目的地址生成二维码的入口。
@@ -228,3 +323,16 @@ response:
 1. 需要使用ngrok将内外网进行一个穿透，使项目可以通过外网访问。
 2. 数据库设计，需要尽量的满足数据的设计原则，并且数据库之间减少耦合。
 3. 预约的逻辑实现是有多种多样的，本项目增加了难度，加入了课表系统，这使得本系统更基于现实情况。在此种情况下来实现预约是需要做大量的逻辑处理的。
+
+## 前端设计
+![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/7BF86AFED4C74468A13771AAFFEE938B/20560)
+
+![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/0402DCDBFFDC41B693FCC3695FD6E73F/20562)
+
+![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/98659FA19CB747B1BB9341401DC6E1F6/20561)
+
+![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/78BC5253723846338AF633A5295A6864/20564)
+
+![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/FE28B1A63D494849A9CC815B8FA9A16C/20568)
+
+![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/2D2E64CBC6A940AB8F1BAFC6F945EF27/20566)
