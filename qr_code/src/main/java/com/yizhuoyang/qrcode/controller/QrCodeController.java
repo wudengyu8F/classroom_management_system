@@ -9,13 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@RequestMapping(value = "qrcontroller")
 public class QrCodeController {
 
     @Value("${QRCode.classroomFeaturesPath}")
     private String classroomFeaturesPath;
 
-    @GetMapping("getQRCode")
+    @GetMapping("/getQRCode")
     public void getQRCode(HttpServletResponse response) {
         QRCodeUtils.createQRImage(classroomFeaturesPath, response);
     }
