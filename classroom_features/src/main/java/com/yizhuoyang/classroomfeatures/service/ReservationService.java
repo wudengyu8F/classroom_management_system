@@ -55,9 +55,6 @@ public class ReservationService {
     }
 
     public Result insertInfo(ReservationInfo reservationInfo) {
-        if (reservationInfo == null) {
-            return new Result(0, "fail");
-        }
         try {
             boolean flag = reservationDao.insertInfo(reservationInfo);
             if (flag) {

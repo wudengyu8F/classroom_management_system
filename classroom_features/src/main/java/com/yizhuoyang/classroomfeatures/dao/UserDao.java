@@ -10,7 +10,5 @@ public interface UserDao {
 
     int register(UserRequest userRequest);
 
-    Set<String> getPermissionsByUserId(String userId);
-
     Set<String> getRolesByUserId(String userId);
 }

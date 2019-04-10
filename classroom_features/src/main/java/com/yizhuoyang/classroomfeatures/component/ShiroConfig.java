@@ -41,9 +41,10 @@ public class ShiroConfig {
         //授权过滤器
         filterChainDefinitionMap.put("/login/add", "perms[user:add]");
         //角色过滤器  审批页面进行一个角色判断
+        filterChainDefinitionMap.put("/rsv/high/*", "roles[admin]");
         filterChainDefinitionMap.put("/login/test", "roles[admin,admin1]");
         filterChainDefinitionMap.put("/login/*", "anon");
-        filterChainDefinitionMap.put("/**", "authc");
+//        filterChainDefinitionMap.put("/**", "authc");
         //登录地址
         shiroFilterFactoryBean.setLoginUrl("/login/subLogin");
         // 登录成功后要跳转的链接
@@ -102,11 +103,10 @@ public class ShiroConfig {
     }
 
     private MyLogoutFilter myLogoutFilter() {
-//        MyLogoutFilter myLogoutFilter = new MyLogoutFilter();
-//        myLogoutFilter.setRedirectUrl("/login/logout");
-//        myLogoutFilter.setPostOnlyLogout(true);
-//        return myLogoutFilter;
-        return new MyLogoutFilter();
+        MyLogoutFilter myLogoutFilter = new MyLogoutFilter();
+        myLogoutFilter.setRedirectUrl("/login/out");
+        myLogoutFilter.setPostOnlyLogout(true);
+        return myLogoutFilter;
     }
 
     @Bean("rememberMeCookie")

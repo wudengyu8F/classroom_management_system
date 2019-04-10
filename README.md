@@ -28,8 +28,7 @@ body:
 	"username":"wangwu",
 	"password":"123456",
 	"sex":true,
-	"roles":"student",
-	"perms":" user:add"
+	"roles":"student"
 }
 
 response:
@@ -69,8 +68,8 @@ URL: /login/logout
 ```
 response:
 {
-    "code": 0,
-    "message": "未登录",
+    "code": 1,
+    "message": "正常退出",
     "data": null
 }
 ```
@@ -93,30 +92,20 @@ response:
 }
 ```
 
-#### 获得教学楼信息
-Method: GET
-
-URL: /cls/getTeachingBuilding
-
-```
-response:
-{
-    "code": 1,
-    "message": "success",
-    "data": "[\"教1\",\"教2\"]"
-}
-```
-
 #### 通过条件获得教室信息
 Method: GET
 
-URL: /cls/getRoomByTIdAndSize
+URL: /cls/getRoomByCondition
 
 ```
 request:
-teachingBuilding=0 (获得全部给0，具体的给具体教学楼id)
+teachingBuilding="教1" (具体的给具体教学楼id，不给默认为无该条件)
 
-size=2 (获得全部给0,大于120座给1，小于120座给2)
+size=2 (大于等于120座给1，小于120座给2，不给默认为无该条件)
+
+room_number=1(具体的教室号，不给默认为无该条件)
+
+若需要显示全部，则可以不给任何条件查询
 
 response:
 {
@@ -134,52 +123,9 @@ URL: /cls/getRoomDetailById
 
 ```
 request:
-id=1 (数据库教室表中的主键)
+id=1 (教室id，唯一主键)
 
-response:
-{
-    "code": 1,
-    "message": "success",
-    "data": {
-        "classroom": {
-            "seatsNumber": 120,
-            "roomLocal": null,
-            "roomNumber": 1,
-            "teachingBuilding": "教1",
-            "id": 1,
-            "multimediaEquipment": "电脑，投影仪"
-        },
-        "status": [
-            {
-                "time": 1,
-                "status": "上课"
-            },
-            {
-                "time": 3,
-                "status": "上课"
-            },
-            {
-                "time": 5,
-                "status": "上课"
-            },
-            {
-                "time": 4,
-                "status": "排队"
-            }
-        ]
-    }
-}
-```
-
-#### 通过时间获得具体教室信息
-Method: GET
-
-URL: /cls/getRoomDetailByIdAndDate
-
-```
-request:
-id=1 (数据库教室表中的主键)
-date=20190306
+可选参数：date=20190306(不传默认为显示当天)
 
 response:
 {
@@ -284,7 +230,7 @@ URL: /rsv/getApprovalDetail
 ```
 request:
 
-date=20190306
+可选参数：date=20190306(不给默认显示当天)
 
 response:
 {
@@ -301,9 +247,11 @@ URL: /rsv/approvalOperation
 
 ```
 request:
-id=4&ope=2&desc=驳回
-id=4&ope=1&desc=同意
+id=4(操作的学生申请id)
 
+ope=3(操作码，1为通过，3为驳回)
+
+desc=驳回(驳回理由，若为通过则不需要给)
 
 response:
 {

@@ -27,19 +27,10 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 
     @Override
     public int register(UserRequest userRequest) {
-        String sql = "insert into user (user_id,username,password,sex,roles,perms) values(?,?,?,?,?,?)";
+        String sql = "insert into user (user_id,username,password,sex,roles) values(?,?,?,?,?)";
         Md5Hash md5Hash = new Md5Hash(userRequest.getPassword());
-        Object[] args = {userRequest.getUserId(), userRequest.getUsername(), md5Hash.toString(), userRequest.isSex(), userRequest.getRoles(), userRequest.getPerms()};
+        Object[] args = {userRequest.getUserId(), userRequest.getUsername(), md5Hash.toString(), userRequest.isSex(), userRequest.getRoles()};
         return jdbcTemplate.update(sql, args);
-    }
-
-    @Override
-    public Set<String> getPermissionsByUserId(String userId) {
-        String sql = "select perms from user where user_id=?";
-        BeanPropertyRowMapper<UserRequest> rowMapper = new BeanPropertyRowMapper<>(UserRequest.class);
-        UserRequest userRequest = jdbcTemplate.queryForObject(sql, rowMapper, userId);
-        String[] split = Objects.requireNonNull(userRequest).getPerms().split(",");
-        return new HashSet<>(Arrays.asList(split));
     }
 
     @Override

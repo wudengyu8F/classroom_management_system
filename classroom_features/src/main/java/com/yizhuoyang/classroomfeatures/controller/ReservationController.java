@@ -4,10 +4,9 @@ import com.yizhuoyang.classroomfeatures.constant.Result;
 import com.yizhuoyang.classroomfeatures.domain.ReservationInfo;
 import com.yizhuoyang.classroomfeatures.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/rsv")
 public class ReservationController {
 
@@ -23,8 +22,10 @@ public class ReservationController {
      * 预约页面申请预约
      */
     @PostMapping(value = "/insertInfo")
-    @ResponseBody
-    public Result insertInfo(@RequestBody ReservationInfo reservationInfo) {
+    public Result insertInfo(@RequestBody(required = false) ReservationInfo reservationInfo) {
+        if (reservationInfo == null) {
+            return new Result(-1, "参数错误");
+        }
         return reservationService.insertInfo(reservationInfo);
     }
 
@@ -33,56 +34,42 @@ public class ReservationController {
      * 学生预约界面
      */
     @GetMapping(value = "/getStudentRSVById")
-    @ResponseBody
-    public Result getStudentRSVById(@RequestParam("uid") Integer uid) {
+    public Result getStudentRSVById(@RequestParam(value = "uid", required = false) Integer uid) {
+        if (uid == null) {
+            return new Result(-1, "参数错误");
+        }
         return reservationService.getStudentRSVById(uid);
     }
 
     /**
-     * desc: 学生预约界面取消申请操作
-     * <p>
-     * request:
-     * /rsv/cancelApplication?id=1
-     * <p>
-     * response:
-     * {"code": 1,"message": "success","data": null}
+     * 学生预约界面取消申请操作
      */
     @GetMapping(value = "/cancelApplication")
-    @ResponseBody
-    public Result cancelApplication(@RequestParam("id") Integer id) {
+    public Result cancelApplication(@RequestParam(value = "id", required = false) Integer id) {
+        if (id == null) {
+            return new Result(-1, "参数错误");
+        }
         return reservationService.cancelApplication(id);
     }
 
     /**
-     * desc: 审批界面
-     * <p>
-     * request:
-     * /rsv/getApprovalDetail?date=20190306
-     * <p>
-     * response:
-     * {"code":1,"message":"success","data":"[{\"date\":20190306,\"id\":1,\"isPass\":0,\"reservationDesc\":\"计算机协会活动\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"zhangsan\"},
-     * {\"date\":20190306,\"id\":2,\"isPass\":0,\"reservationDesc\":\"欢乐时光\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"lisi\"},
-     * {\"date\":20190306,\"id\":3,\"isPass\":0,\"reservationDesc\":\"计算机协会活动\",\"roomId\":0,\"roomNumber\":2,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"zhangsan\"}]"}
+     * 审批界面显示
      */
-    @GetMapping(value = "/getApprovalDetail")
-    @ResponseBody
-    public Result getApprovalDetail(@RequestParam("date") Integer date) {
+    @GetMapping(value = "high/getApprovalDetail")
+    public Result getApprovalDetail(@RequestParam(value = "date", defaultValue = "0") Integer date) {
         return reservationService.getApprovalDetail(date);
     }
 
     /**
      * desc: 审批界面操作
-     * <p>
-     * request:
-     * /rsv/approvalOperation?id=4&ope=4&desc=
-     * /rsv/approvalOperation?id=4&ope=4&desc=驳回
-     * <p>
-     * response:
-     * {"code": 1,"message": "success","data": null}
      */
-    @GetMapping(value = "/approvalOperation")
-    @ResponseBody
-    public Result approvalOperation(@RequestParam("id") Integer id,@RequestParam("ope")  Integer ope, @RequestParam("desc") String desc) {
+    @GetMapping(value = "high/approvalOperation")
+    public Result approvalOperation(@RequestParam(value = "id", required = false) Integer id,
+                                    @RequestParam(value = "ope", required = false) Integer ope,
+                                    @RequestParam(value = "desc", defaultValue = "") String desc) {
+        if (id == null || ope == null) {
+            return new Result(-1, "参数错误");
+        }
         return reservationService.approvalOperation(id, ope, desc);
     }
 

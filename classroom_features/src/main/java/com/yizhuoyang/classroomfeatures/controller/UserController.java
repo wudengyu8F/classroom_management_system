@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping(value = "/login")
 public class UserController {
 
@@ -25,8 +25,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/subLogin")
-    @ResponseBody
-    public Result subLogin(@RequestBody UserRequest userRequest) {
+    public Result subLogin(@RequestBody(required = false) UserRequest userRequest) {
+        if (userRequest == null) {
+            return new Result(-1, "参数错误");
+        }
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(Integer.toString(userRequest.getUserId()), userRequest.getPassword());
         try {
@@ -43,48 +45,26 @@ public class UserController {
     }
 
     @GetMapping(value = "/subLogin")
-    @ResponseBody
     public Result subLogin() {
         return new Result(0, "未登录");
     }
 
     @PostMapping(value = "/register")
-    @ResponseBody
-    public Result register(@RequestBody UserRequest userRequest) {
+    public Result register(@RequestBody(required = false) UserRequest userRequest) {
+        if (userRequest == null) {
+            return new Result(-1, "参数错误");
+        }
         return userService.register(userRequest);
     }
 
-//    权限和角色测试
-//    @GetMapping(value = "/add")
-//    public String getTestPage() {
-//        return "index";
-//    }
-//
-//    @GetMapping(value = "/test")
-//    public String getTest() {
-//        return "index";
-//    }
-
     @GetMapping(value = "/error")
-    @ResponseBody
     public Result error() {
         return new Result(4, "权限不够");
     }
 
-//    @GetMapping(value = "/logout")
-//    @ResponseBody
-//    public Result logout() {
-//        return new Result(1, "正常退出");
-//    }
+    @GetMapping(value = "/out")
+    public Result logout() {
+        return new Result(1, "正常退出");
+    }
 
-//    @GetMapping(value = "/success")
-//    @ResponseBody
-//    public Result success() {
-//        return new Result(1, "登录成功");
-//    }
-
-//    @GetMapping("/index")
-//    public String toIndex() {
-//        return "index";
-//    }
 }

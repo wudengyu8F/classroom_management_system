@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ClassroomService {
@@ -45,12 +47,36 @@ public class ClassroomService {
     }
 
 
-    public Result getRoomByIdAndSize(String teachingBuilding, Integer size) {
-        if ("0".equals(teachingBuilding) && size == 0) {
+    public Result getRoomByCondition(String teachingBuilding, Integer size, Integer roomNumber) {
+        if (teachingBuilding == null && size == null && roomNumber == null) {
             return getClassroomDetails();
         }
+        StringBuilder sql = new StringBuilder("select * from classroom");
+        boolean target = false;
+        sql.append(" where");
+        if (teachingBuilding != null) {
+            sql.append(" teaching_building=\"").append(teachingBuilding).append("\"");
+            target = true;
+        }
+        if (size != null) {
+            if (target) {
+                sql.append(" and");
+            }
+            if (size == 1) {
+                sql.append(" seats_number>=120");
+            } else {
+                sql.append(" seats_number<120");
+            }
+            target = true;
+        }
+        if (roomNumber != null) {
+            if (target) {
+                sql.append(" and");
+            }
+            sql.append(" room_number=").append(roomNumber);
+        }
         try {
-            List<Classroom> list = classroomDao.getRoomByIdAndSize(teachingBuilding, size);
+            List<Classroom> list = classroomDao.selectBySQL(sql);
             return new Result(1, "success", JSONObject.toJSONString(list));
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -58,21 +84,9 @@ public class ClassroomService {
         }
     }
 
-    public Result getTeachingBuilding() {
-        try {
-            List<String> list = classroomDao.getTeachingBuilding();
-            HashSet<String> strings = new HashSet<>(list);
-            return new Result(1, "success", JSONObject.toJSONString(strings));
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return new Result(-1, "fail");
-        }
-    }
-
-
     public Result getRoomDetailByIdAndDate(Integer id, Integer date) {
         try {
-            Classroom classroom = null;
+            Classroom classroom;
             try {
                 classroom = classroomDao.getRoomDetailById(id);
             } catch (Exception e) {

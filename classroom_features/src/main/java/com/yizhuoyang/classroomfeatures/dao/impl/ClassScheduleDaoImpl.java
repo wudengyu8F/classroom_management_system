@@ -10,7 +10,7 @@ import java.util.List;
 public class ClassScheduleDaoImpl extends AbstractDao implements ClassScheduleDao {
 
     @Override
-    public List<Integer> getClassScheduleByIdAndDate(Integer id, int date) throws Exception {
+    public List<Integer> getClassScheduleByIdAndDate(Integer id, int date) {
         String sql = "select time from class_schedule where room_id=? and date=?";
         return jdbcTemplate.queryForList(sql, new Object[]{id, date}, Integer.class);
     }

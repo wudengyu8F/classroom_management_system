@@ -9,11 +9,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class MyShiroRealm extends AuthorizingRealm {
@@ -30,15 +27,9 @@ public class MyShiroRealm extends AuthorizingRealm {
         //从数据库或者缓存获取角色信息
         Set<String> roles = getRolesByUserId(userId);
         //从数据库或者缓存获取权限信息
-        Set<String> permissions = getPermissionsByUserId(userId);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.setRoles(roles);
-        simpleAuthorizationInfo.setStringPermissions(permissions);
         return simpleAuthorizationInfo;
-    }
-
-    private Set<String> getPermissionsByUserId(String userId) {
-        return userDao.getPermissionsByUserId(userId);
     }
 
     private Set<String> getRolesByUserId(String userId) {
@@ -57,10 +48,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         if ("".equals(password)) {
             return null;
         }
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userId, password, "myShiroRealm");
-        //TODO 加盐
-//        authenticationInfo.setCredentialsSalt(ByteSource.Util.bytes(userId));
-        return authenticationInfo;
+        return new SimpleAuthenticationInfo(userId, password, "myShiroRealm");
     }
 
     private String getPasswordByUserId(String userId) {

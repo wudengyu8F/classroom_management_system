@@ -15,8 +15,6 @@ abstract class AbstractUser {
 
     private String roles;
 
-    private String perms;
-
     public int getUserId() {
         return userId;
     }
@@ -24,7 +22,6 @@ abstract class AbstractUser {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
 
     public String getUsername() {
         return username;
@@ -58,11 +55,4 @@ abstract class AbstractUser {
         this.roles = roles;
     }
 
-    public String getPerms() {
-        return perms;
-    }
-
-    public void setPerms(String perms) {
-        this.perms = perms;
-    }
 }

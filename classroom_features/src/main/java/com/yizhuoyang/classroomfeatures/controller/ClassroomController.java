@@ -4,10 +4,9 @@ import com.yizhuoyang.classroomfeatures.constant.Result;
 
 import com.yizhuoyang.classroomfeatures.service.ClassroomService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping(value = "/cls")
 public class ClassroomController {
 
@@ -22,45 +21,30 @@ public class ClassroomController {
      * 获得教室页的数据
      */
     @GetMapping(value = "/getRoomList")
-    @ResponseBody
     public Result getClassroomDetails() {
         return classroomService.getClassroomDetails();
     }
 
     /**
-     * 获得教室页的教学楼信息
-     */
-    @GetMapping(value = "/getTeachingBuilding")
-    @ResponseBody
-    public Result getTeachingBuilding() {
-        return classroomService.getTeachingBuilding();
-    }
-
-    /**
      * 通过条件获取教室信息
      */
-    @GetMapping(value = "/getRoomByTIdAndSize")
-    @ResponseBody
-    public Result getRoomByIdAndSize(@RequestParam(name = "teachingBuilding") String teachingBuilding, @RequestParam(name = "size") Integer size) {
-        return classroomService.getRoomByIdAndSize(teachingBuilding, size);
+    @GetMapping(value = "/getRoomByCondition")
+    public Result getRoomByIdAndSize(@RequestParam(name = "teachingBuilding", required = false) String teachingBuilding,
+                                     @RequestParam(name = "size", required = false) Integer size,
+                                     @RequestParam(name = "room_number", required = false) Integer roomNumber) {
+        return classroomService.getRoomByCondition(teachingBuilding, size, roomNumber);
     }
 
     /**
      * 通过id和date获取教室的详情
      */
     @GetMapping(value = "/getRoomDetailByIdAndDate")
-    @ResponseBody
-    public Result getRoomDetailByIdAndDate(@RequestParam(name = "id") Integer id, @RequestParam(name = "date") Integer date) {
+    public Result getRoomDetailByIdAndDate(@RequestParam(name = "id", required = false) Integer id,
+                                           @RequestParam(name = "date", defaultValue = "0") Integer date) {
+        if (id == null) {
+            return new Result(-1, "参数错误");
+        }
         return classroomService.getRoomDetailByIdAndDate(id, date);
-    }
-
-    /**
-     * 通过id获取教室的详情
-     */
-    @GetMapping(value = "/getRoomDetailById")
-    @ResponseBody
-    public Result getRoomDetailById(@RequestParam(name = "id") Integer id) {
-        return classroomService.getRoomDetailByIdAndDate(id, 0);
     }
 
 }
