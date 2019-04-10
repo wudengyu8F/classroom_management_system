@@ -222,7 +222,7 @@ response:
 }
 ```
 
-#### 审批界面
+#### 审批界面显示
 Method: GET
 
 URL: /rsv/getApprovalDetail
@@ -236,7 +236,7 @@ response:
 {
     "code": 1,
     "message": "success",
-    "data": "[{\"date\":20190306,\"id\":1,\"isPass\":0,\"reservationDesc\":\"计算机协会活动\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"zhangsan\"},{\"date\":20190306,\"id\":2,\"isPass\":0,\"reservationDesc\":\"欢乐时光\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"lisi\"},{\"date\":20190306,\"id\":3,\"isPass\":0,\"reservationDesc\":\"计算机协会活动\",\"roomId\":0,\"roomNumber\":2,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"zhangsan\"},{\"date\":20190306,\"id\":5,\"isPass\":0,\"reservationDesc\":\"计算机协会又来了\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":3,\"userId\":0,\"userName\":\"zhangsan\"}]"
+    "data": "[{\"date\":20190306,\"id\":1,\"reservationDesc\":\"计算机协会活动\",\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userName\":\"zhangsan\"}]"
 }
 ```
 
