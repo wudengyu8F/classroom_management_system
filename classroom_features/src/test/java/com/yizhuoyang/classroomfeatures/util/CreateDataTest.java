@@ -43,6 +43,20 @@ public class CreateDataTest {
         }
     }
 
+    @Test
+    public void updateDateForResvInfo() {
+        String sql = "update reservation_info set date=? where id=?";
+        int date = getDate();
+        for (int i = 0; i < 10; i++) {
+            try {
+                jdbcTemplate.update(sql, date, i);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+
     private int getDate() {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmm");
         Calendar calendar = Calendar.getInstance();

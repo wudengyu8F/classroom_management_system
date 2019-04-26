@@ -41,7 +41,8 @@ public class ShiroConfig {
         //授权过滤器
         filterChainDefinitionMap.put("/login/add", "perms[user:add]");
         //角色过滤器  审批页面进行一个角色判断
-        filterChainDefinitionMap.put("/rsv/high/*", "roles[admin]");
+        //TODO 打开该代码
+//        filterChainDefinitionMap.put("/rsv/high/*", "roles[admin]");
         filterChainDefinitionMap.put("/login/test", "roles[admin,admin1]");
         filterChainDefinitionMap.put("/login/*", "anon");
 //        filterChainDefinitionMap.put("/**", "authc");
