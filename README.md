@@ -268,16 +268,3 @@ response:
 1. 需要使用ngrok将内外网进行一个穿透，使项目可以通过外网访问。
 2. 数据库设计，需要尽量的满足数据的设计原则，并且数据库之间减少耦合。
 3. 预约的逻辑实现是有多种多样的，本项目增加了难度，加入了课表系统，这使得本系统更基于现实情况。在此种情况下来实现预约是需要做大量的逻辑处理的。
-
-## 前端设计
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/7BF86AFED4C74468A13771AAFFEE938B/20560)
-
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/0402DCDBFFDC41B693FCC3695FD6E73F/20562)
-
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/98659FA19CB747B1BB9341401DC6E1F6/20561)
-
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/78BC5253723846338AF633A5295A6864/20564)
-
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/FE28B1A63D494849A9CC815B8FA9A16C/20568)
-
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/2D2E64CBC6A940AB8F1BAFC6F945EF27/20566)
