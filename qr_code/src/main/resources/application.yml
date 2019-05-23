@@ -1,6 +1,7 @@
 server:
-  port: 8080
+  port: 8088
 
 QRCode:
 #  classroomFeaturesPath: https://www.baidu.com
-  classroomFeaturesPath: http://yizhuoyang.free.idcfengye.com/login/test
+#  设置前端页面主入口
+  classroomFeaturesPath: http://yizhuoyang.free.idcfengye.com/

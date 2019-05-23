@@ -2,17 +2,6 @@ server:
   port: 80
 
 spring:
-  thymeleaf:
-    cache: false
-    check-template-location: true
-    servlet:
-      content-type: text/html
-    enabled: true
-    encoding: utf-8
-    mode: HTML5
-    prefix: classpath:/templates/
-    suffix: .html
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.129.20:3306/project?useUnicode=true&characterEncoding=UTF-8&connectTimeout=60000&socketTimeout=60000&tinyInt1isBit=false&serverTimezone=GMT%2B8

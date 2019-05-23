@@ -33,8 +33,9 @@ public class ReservationInfo {
     /**
      * 预约时间
      */
-    private int time;
+    private int timeId;
 
+    private String time;
     /**
      * 预约用户学号
      */
@@ -53,7 +54,9 @@ public class ReservationInfo {
     /**
      * 是否通过预约
      */
-    private int isPass;
+    private int isPassId;
+
+    private String isPass;
 
     public int getId() {
         return id;
@@ -95,11 +98,11 @@ public class ReservationInfo {
         this.date = date;
     }
 
-    public int getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -127,27 +130,27 @@ public class ReservationInfo {
         this.reservationDesc = reservationDesc;
     }
 
-    public int getIsPass() {
+    public int getIsPassId() {
+        return isPassId;
+    }
+
+    public void setIsPassId(int isPassId) {
+        this.isPassId = isPassId;
+    }
+
+    public int getTimeId() {
+        return timeId;
+    }
+
+    public void setTimeId(int timeId) {
+        this.timeId = timeId;
+    }
+
+    public String getIsPass() {
         return isPass;
     }
 
-    public void setIsPass(int isPass) {
+    public void setIsPass(String isPass) {
         this.isPass = isPass;
-    }
-
-    @Override
-    public String toString() {
-        return "ReservationInfo{" +
-                "id=" + id +
-                ", roomId=" + roomId +
-                ", teachingBuilding='" + teachingBuilding + '\'' +
-                ", roomNumber=" + roomNumber +
-                ", date=" + date +
-                ", time=" + time +
-                ", userId=" + userId +
-                ", userName='" + userName + '\'' +
-                ", reservationDesc='" + reservationDesc + '\'' +
-                ", isPass=" + isPass +
-                '}';
     }
 }

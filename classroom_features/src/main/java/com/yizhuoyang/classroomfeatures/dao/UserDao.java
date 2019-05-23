@@ -11,4 +11,6 @@ public interface UserDao {
     int register(UserRequest userRequest);
 
     Set<String> getRolesByUserId(String userId);
+
+    String getUserNameByUId(String uid) throws Exception;
 }

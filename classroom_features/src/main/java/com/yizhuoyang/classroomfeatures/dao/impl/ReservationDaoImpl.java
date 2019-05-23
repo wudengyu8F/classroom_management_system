@@ -15,8 +15,8 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
         String sql = "select time,is_pass from reservation_info where room_id=? and date=? and is_pass<2";
         return jdbcTemplate.query(sql, new Object[]{id, date}, (rs, i) -> {
             ReservationInfo reservationInfo = new ReservationInfo();
-            reservationInfo.setTime(rs.getInt("time"));
-            reservationInfo.setIsPass(rs.getInt("is_pass"));
+            reservationInfo.setTimeId(rs.getInt("time"));
+            reservationInfo.setIsPassId(rs.getInt("is_pass"));
             return reservationInfo;
         });
     }
@@ -24,7 +24,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
     @Override
     public boolean insertInfo(ReservationInfo reservationInfo) {
         String sql = "insert into reservation_info (room_id, date, time, user_id, username,reservation_desc)  value (?,?,?,?,?,?)";
-        int update = jdbcTemplate.update(sql, reservationInfo.getRoomId(), reservationInfo.getDate(), reservationInfo.getTime(), reservationInfo.getUserId(), reservationInfo.getUserName(),
+        int update = jdbcTemplate.update(sql, reservationInfo.getRoomId(), reservationInfo.getDate(), reservationInfo.getTimeId(), reservationInfo.getUserId(), reservationInfo.getUserName(),
                 reservationInfo.getReservationDesc());
         return update == 1;
     }
@@ -34,14 +34,14 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
         String sql = "select r.id as id,c.teaching_building as teaching_building,c.room_number as room_number, " +
                 "r.date as date,r.time as time,r.is_pass as is_pass " +
                 "from reservation_info r,classroom c " +
-                "where r.user_id = ? and r.room_id=c.id and r.is_pass<2 " +
+                "where r.user_id = ? and r.room_id=c.id and r.is_pass<>2 " +
                 "order by r.time desc;";
         return jdbcTemplate.query(sql, new Object[]{uid}, (rs, i) -> {
             ReservationInfo reservationInfo = new ReservationInfo();
             reservationInfo.setId(rs.getInt("id"));
             reservationInfo.setTeachingBuilding(rs.getString("teaching_building"));
-            reservationInfo.setIsPass(rs.getInt("is_pass"));
-            reservationInfo.setTime(rs.getInt("time"));
+            reservationInfo.setIsPassId(rs.getInt("is_pass"));
+            reservationInfo.setTimeId(rs.getInt("time"));
             reservationInfo.setDate(rs.getInt("date"));
             reservationInfo.setRoomNumber(rs.getInt("room_number"));
             return reservationInfo;
@@ -66,7 +66,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
             reservationInfo.setRoomNumber(rs.getInt("room_number"));
             reservationInfo.setDate(rs.getInt("date"));
             reservationInfo.setTeachingBuilding(rs.getString("teaching_building"));
-            reservationInfo.setTime(rs.getInt("time"));
+            reservationInfo.setTimeId(rs.getInt("time"));
             reservationInfo.setUserName(rs.getString("username"));
             reservationInfo.setReservationDesc(rs.getString("reservation_desc"));
             return reservationInfo;

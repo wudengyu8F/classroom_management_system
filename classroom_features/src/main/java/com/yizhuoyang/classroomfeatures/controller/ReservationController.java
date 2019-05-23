@@ -17,7 +17,6 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-
     /**
      * 预约页面申请预约
      */
@@ -28,7 +27,6 @@ public class ReservationController {
         }
         return reservationService.insertInfo(reservationInfo);
     }
-
 
     /**
      * 学生预约界面

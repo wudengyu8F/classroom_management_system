@@ -6,16 +6,14 @@ import com.yizhuoyang.classroomfeatures.controller.ClassroomController;
 import com.yizhuoyang.classroomfeatures.dao.ClassroomDao;
 import com.yizhuoyang.classroomfeatures.domain.Classroom;
 import com.yizhuoyang.classroomfeatures.domain.RespRoom;
+import com.yizhuoyang.classroomfeatures.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ClassroomService {
@@ -35,14 +33,13 @@ public class ClassroomService {
         this.classScheduleService = classScheduleService;
     }
 
-
     public Result getClassroomDetails() {
         try {
             List<Classroom> list = classroomDao.getClassroomDetails();
-            return new Result(1, "success", JSONObject.toJSONString(list));
+            return new Result(1, "成功", JSONObject.toJSONString(list));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(-1, "fail");
+            return new Result(-1, "失败");
         }
     }
 
@@ -77,10 +74,10 @@ public class ClassroomService {
         }
         try {
             List<Classroom> list = classroomDao.selectBySQL(sql);
-            return new Result(1, "success", JSONObject.toJSONString(list));
+            return new Result(1, "成功", JSONObject.toJSONString(list));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(-1, "fail");
+            return new Result(-1, "失败");
         }
     }
 
@@ -91,25 +88,32 @@ public class ClassroomService {
                 classroom = classroomDao.getRoomDetailById(id);
             } catch (Exception e) {
                 logger.error(e.getMessage());
-                return new Result(-1, "fail");
+                return new Result(-1, "失败");
             }
             List<RespRoom> classScheduleData = classScheduleService.getClassScheduleByIdAndDate(id, date);
             List<RespRoom> reservationData = reservationService.getReservationByRoomIdAndDate(id, date);
             if (classScheduleData == null) {
-                return new Result(-1, "fail");
+                return new Result(-1, "失败");
             }
-            if (reservationData != null) {
-                classScheduleData.addAll(reservationData);
+
+            RespRoom[] list = new RespRoom[5];
+            for (int i = 0; i < 5; i++) {
+                list[i] = new RespRoom(i, Utils.getTimeMapping(i + 1), "空闲");
             }
+            for (RespRoom r : classScheduleData) {
+                list[r.getTimeId() - 1] = r;
+            }
+            for (RespRoom r : reservationData) {
+                list[r.getTimeId() - 1] = r;
+            }
+            List<RespRoom> respRooms = Arrays.asList(list);
             JSONObject object = new JSONObject();
             object.put("classroom", JSONObject.toJSON(classroom));
-            object.put("status", classScheduleData);
-            return new Result(1, "success", object);
+            object.put("status", respRooms);
+            return new Result(1, "成功", object);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(-1, "fail");
+            return new Result(-1, "失败");
         }
-
-
     }
 }

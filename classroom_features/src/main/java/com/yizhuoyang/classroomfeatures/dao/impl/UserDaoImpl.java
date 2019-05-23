@@ -41,4 +41,11 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
         String[] split = Objects.requireNonNull(userRequest).getRoles().split(",");
         return new HashSet<>(Arrays.asList(split));
     }
+
+    @Override
+    public String getUserNameByUId(String uid) throws Exception {
+        String sql = "select username from user where user_id=?";
+        BeanPropertyRowMapper<UserRequest> rowMapper = new BeanPropertyRowMapper<>(UserRequest.class);
+        return Objects.requireNonNull(jdbcTemplate.queryForObject(sql, rowMapper, uid)).getUsername();
+    }
 }

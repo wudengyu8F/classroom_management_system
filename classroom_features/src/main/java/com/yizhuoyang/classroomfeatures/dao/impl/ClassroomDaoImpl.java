@@ -27,10 +27,11 @@ public class ClassroomDaoImpl extends AbstractDao implements ClassroomDao {
 
     @Override
     public Classroom getRoomDetailById(Integer id) {
-        String sql = "select id,teaching_building,room_number,seats_number,multimedia_equipment from classroom where id=?";
+        String sql = "select id,teaching_building,room_local,room_number,seats_number,multimedia_equipment from classroom where id=?";
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, (rs, i) -> {
             Classroom classroom = new Classroom();
             classroom.setId(rs.getInt("id"));
+            classroom.setRoomLocal(rs.getString("room_local"));
             classroom.setTeachingBuilding(rs.getString("teaching_building"));
             classroom.setRoomNumber(rs.getInt("room_number"));
             classroom.setSeatsNumber(rs.getInt("seats_number"));

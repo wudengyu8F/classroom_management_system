@@ -10,7 +10,6 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,13 +33,16 @@ public class UserController {
         try {
             token.setRememberMe(userRequest.isRememberMe());
             subject.login(token);
-            return new Result(1, "success");
+            String username = userService.getUserNameByUId(token.getUsername());
+            return new Result(1, "success", username);
         } catch (UnknownAccountException e) {
             //登录失败，用户名不存在
-            return new Result(2, "用户名不存在");
+            return new Result(-1, "用户名不存在");
         } catch (IncorrectCredentialsException e) {
             //登录失败：密码错误
-            return new Result(3, "密码错误");
+            return new Result(-1, "密码错误");
+        } catch (Exception e){
+            return new Result(-1, "服务器错误");
         }
     }
 

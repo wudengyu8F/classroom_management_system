@@ -10,8 +10,8 @@ UNIQUE KEY `uniq` (user_id),
 KEY `search_key` (user_id,password)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
-insert into user (user_id,username,password,sex) value (10000111,"zhangsan","E10ADC3949BA59ABBE56E057F20F883E",0),
-(10000112,"lisi","E10ADC3949BA59ABBE56E057F20F883E",1);
+insert into user (user_id,username,password,sex,roles) value (10000111,"zhangsan","E10ADC3949BA59ABBE56E057F20F883E",0,"student"),
+(10000112,"lisi","E10ADC3949BA59ABBE56E057F20F883E",1,"admin");
 
 create table classroom(
 id int(11) unsigned not null auto_increment comment 'id',
@@ -25,9 +25,16 @@ unique key `uniq` (teaching_building,room_number)
 )ENGINE=InnoDB DEFAULT  charset=utf8 comment = '教室表';
 
 
-insert into classroom (teaching_building, room_number, room_local, seats_number, multimedia_equipment) value ("教1",1,"东南角",120,"电脑，投影仪"),
-("教1",2,"东南角",120,"电脑，投影仪"),("教1",3,"东南角",90,"电脑，投影仪，化学仪器"),("教2",1,"东北角",90,"电脑，投影仪，物理仪器"),("教2",2,"东北角",120,"电脑，投影仪");
-
+insert into classroom (teaching_building, room_number, room_local, seats_number, multimedia_equipment) value
+("教1",101,"东南角",120,"电脑，投影仪"),
+("教1",102,"东南角",120,"电脑，投影仪"),
+("教1",201,"西北角",90,"电脑，投影仪，化学仪器"),
+("教1",202,"东南角",90,"电脑，投影仪，化学仪器"),
+("教2",101,"东南角",120,"电脑，投影仪，物理仪器"),
+("教2",102,"西北角",90,"电脑，投影仪，生物仪器"),
+("教2",103,"西北角",120,"电脑，投影仪，化学仪器"),
+("教2",201,"东北角",90,"电脑，投影仪，物理仪器"),
+("教2",202,"东北角",120,"电脑，投影仪");
 
 
 create table reservation_info(
@@ -45,10 +52,11 @@ unique key `uniq` (room_id,date,user_id,time),
 key `user_search` (user_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='预约信息表';
 
+insert into reservation_info (room_id,date,time,user_id,username,reservation_desc,is_pass)
+value(1,20190522,3,10000111,"zhangsan","hello",0),
+(2,20190522,5,10000111,"zhangsan","hello1",1),
+(3,20190522,1,10000111,"zhangsan","hello2",3);
 
-insert into reservation_info (room_id, date, time, user_id, username,reservation_desc,is_pass)  value
-(1,20190306,4,10000111,"zhangsan","计算机协会活动",0),(1,20190306,4,10000112,"lisi","欢乐时光",0),
-(2,20190306,4,10000111,"zhangsan","计算机协会活动",0),(2,20190306,4,10000112,"lisi","欢乐时光",1);
 
 create table class_schedule(
 id int(11) unsigned not null auto_increment comment 'id',
