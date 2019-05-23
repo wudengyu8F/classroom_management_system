@@ -12,8 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ReservationService {
@@ -31,19 +34,19 @@ public class ReservationService {
             List<ReservationInfo> info = reservationDao.getReservationByRoomIdAndDate(id, date);
             int[] res = new int[6];
             for (ReservationInfo r : info) {
-                if (r.getIsPass() == 1) {
-                    res[r.getTime()] = 2;
+                if (r.getIsPassId() == 1) {
+                    res[r.getTimeId()] = 2;
                 } else {
-                    res[r.getTime()] = 1;
+                    res[r.getTimeId()] = 1;
                 }
             }
             List<RespRoom> respRooms = new ArrayList<>();
             for (int i = 1; i < 6; i++) {
                 if (res[i] == 1) {
-                    respRooms.add(new RespRoom(i, "排队"));
+                    respRooms.add(new RespRoom(i, Utils.getTimeMapping(i), "排队"));
                 }
                 if (res[i] == 2) {
-                    respRooms.add(new RespRoom(i, "占用"));
+                    respRooms.add(new RespRoom(i, Utils.getTimeMapping(i), "占用"));
                 }
             }
             return respRooms;
@@ -55,29 +58,30 @@ public class ReservationService {
     }
 
     public Result insertInfo(ReservationInfo reservationInfo) {
-        if (reservationInfo == null) {
-            return new Result(0, "fail");
-        }
         try {
             boolean flag = reservationDao.insertInfo(reservationInfo);
             if (flag) {
-                return new Result(1, "success");
+                return new Result(1, "成功");
             } else {
-                return new Result(0, "fail");
+                return new Result(-1, "失败");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(0, "fail");
+            return new Result(-1, "失败");
         }
     }
 
     public Result getStudentRSVById(Integer uid) {
         try {
             List<ReservationInfo> details = reservationDao.getStudentRSVById(uid);
-            return new Result(1, "success", JSONObject.toJSONString(details));
+            for (ReservationInfo r : details) {
+                r.setTime(Utils.getTimeMapping(r.getTimeId()));
+                r.setIsPass(Utils.getCodeMapping(r.getIsPassId()));
+            }
+            return new Result(1, "成功", JSONObject.toJSONString(details));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(0, "fail");
+            return new Result(-1, "失败");
         }
     }
 
@@ -85,13 +89,13 @@ public class ReservationService {
         try {
             int res = reservationDao.cancelApplication(id);
             if (res == 1) {
-                return new Result(1, "success");
+                return new Result(1, "成功");
             } else {
-                return new Result(0, "fail");
+                return new Result(-1, "失败");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(0, "fail");
+            return new Result(-1, "失败");
         }
     }
 
@@ -101,10 +105,13 @@ public class ReservationService {
         }
         try {
             List<ReservationInfo> details = reservationDao.getApprovalDetail(date);
-            return new Result(1, "success", JSONObject.toJSONString(details));
+            for (ReservationInfo r : details) {
+                r.setTime(Utils.getTimeMapping(r.getTimeId()));
+            }
+            return new Result(1, "成功", JSONObject.toJSONString(details));
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(0, "fail");
+            return new Result(-1, "失败");
         }
     }
 
@@ -112,13 +119,13 @@ public class ReservationService {
         try {
             int res = reservationDao.approvalOperation(id, ope, desc);
             if (res == 1) {
-                return new Result(1, "success");
+                return new Result(1, "成功");
             } else {
-                return new Result(0, "fail");
+                return new Result(-1, "失败");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(0, "fail");
+            return new Result(-1, "失败");
         }
     }
 }

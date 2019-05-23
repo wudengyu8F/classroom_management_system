@@ -1,7 +1,7 @@
 server:
-  port: 8080
-  servlet:
-    context-path: /qr_code
+  port: 8088
 
 QRCode:
-  classroomFeaturesPath: https://www.baidu.com
+#  classroomFeaturesPath: https://www.baidu.com
+#  设置前端页面主入口
+  classroomFeaturesPath: http://yizhuoyang.free.idcfengye.com/

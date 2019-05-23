@@ -35,21 +35,19 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilters(stringFilterHashMap);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //注意过滤器配置顺序 不能颠倒
-        filterChainDefinitionMap.put("/login/logout", "logout");
+        filterChainDefinitionMap.put("/api/login/logout", "logout");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了，登出后跳转配置的loginUrl
         //认证过滤器 authc--认证  anon--不需要认证
-        //授权过滤器
-        filterChainDefinitionMap.put("/login/add", "perms[user:add]");
         //角色过滤器  审批页面进行一个角色判断
-        filterChainDefinitionMap.put("/login/test", "roles[admin,admin1]");
+        //TODO 打开该代码
+        filterChainDefinitionMap.put("/rsv/high/*", "roles[admin]");
         filterChainDefinitionMap.put("/login/*", "anon");
+        //TODO 打开该代码
         filterChainDefinitionMap.put("/**", "authc");
-        //登录地址
-        shiroFilterFactoryBean.setLoginUrl("/login/subLogin");
-        // 登录成功后要跳转的链接
-//        shiroFilterFactoryBean.setSuccessUrl("/login/success");
+//        //登录地址
+        shiroFilterFactoryBean.setLoginUrl("/api/login/subLogin");
         //未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/login/error");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/api/login/error");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -102,11 +100,10 @@ public class ShiroConfig {
     }
 
     private MyLogoutFilter myLogoutFilter() {
-//        MyLogoutFilter myLogoutFilter = new MyLogoutFilter();
-//        myLogoutFilter.setRedirectUrl("/login/logout");
-//        myLogoutFilter.setPostOnlyLogout(true);
-//        return myLogoutFilter;
-        return new MyLogoutFilter();
+        MyLogoutFilter myLogoutFilter = new MyLogoutFilter();
+        myLogoutFilter.setRedirectUrl("/login/out");
+        myLogoutFilter.setPostOnlyLogout(true);
+        return myLogoutFilter;
     }
 
     @Bean("rememberMeCookie")

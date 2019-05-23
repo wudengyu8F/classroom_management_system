@@ -3,6 +3,7 @@ package com.yizhuoyang.classroomfeatures.dao;
 import com.yizhuoyang.classroomfeatures.domain.Classroom;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ClassroomDao {
 
@@ -10,8 +11,5 @@ public interface ClassroomDao {
 
     Classroom getRoomDetailById(Integer id) throws Exception;
 
-    List<String> getTeachingBuilding() throws Exception;
-
-    List<Classroom> getRoomByIdAndSize(String tId, Integer size) throws Exception;
-
+    List<Classroom> selectBySQL(StringBuilder sql) throws Exception;
 }

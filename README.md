@@ -12,9 +12,6 @@ this is zhuo brance
 |  -1  |  ""  | 错误信息 |  失败   |
 |  0   |  ""  | 错误信息 | 未登录  |
 |  1   |  返回结果  | 错误信息 |  成功   |
-|  2   |  ""  | 错误信息 |用户名不存在|
-|  3   |  ""  | 错误信息 |密码错误 |
-|  4   |  ""  | 错误信息 |权限不够 |
 
 
 #### 注册
@@ -29,8 +26,7 @@ body:
 	"username":"wangwu",
 	"password":"123456",
 	"sex":true,
-	"roles":"student",
-	"perms":" user:add"
+	"roles":"student"
 }
 
 response:
@@ -70,8 +66,8 @@ URL: /login/logout
 ```
 response:
 {
-    "code": 0,
-    "message": "未登录",
+    "code": 1,
+    "message": "正常退出",
     "data": null
 }
 ```
@@ -94,30 +90,20 @@ response:
 }
 ```
 
-#### 获得教学楼信息
-Method: GET
-
-URL: /cls/getTeachingBuilding
-
-```
-response:
-{
-    "code": 1,
-    "message": "success",
-    "data": "[\"教1\",\"教2\"]"
-}
-```
-
 #### 通过条件获得教室信息
 Method: GET
 
-URL: /cls/getRoomByTIdAndSize
+URL: /cls/getRoomByCondition
 
 ```
 request:
-teachingBuilding=0 (获得全部给0，具体的给具体教学楼id)
+teachingBuilding="教1" (具体的给具体教学楼id，不给默认为无该条件)
 
-size=2 (获得全部给0,大于120座给1，小于120座给2)
+size=2 (大于等于120座给1，小于120座给2，不给默认为无该条件)
+
+room_number=1(具体的教室号，不给默认为无该条件)
+
+若需要显示全部，则可以不给任何条件查询
 
 response:
 {
@@ -135,52 +121,9 @@ URL: /cls/getRoomDetailById
 
 ```
 request:
-id=1 (数据库教室表中的主键)
+id=1 (教室id，唯一主键)
 
-response:
-{
-    "code": 1,
-    "message": "success",
-    "data": {
-        "classroom": {
-            "seatsNumber": 120,
-            "roomLocal": null,
-            "roomNumber": 1,
-            "teachingBuilding": "教1",
-            "id": 1,
-            "multimediaEquipment": "电脑，投影仪"
-        },
-        "status": [
-            {
-                "time": 1,
-                "status": "上课"
-            },
-            {
-                "time": 3,
-                "status": "上课"
-            },
-            {
-                "time": 5,
-                "status": "上课"
-            },
-            {
-                "time": 4,
-                "status": "排队"
-            }
-        ]
-    }
-}
-```
-
-#### 通过时间获得具体教室信息
-Method: GET
-
-URL: /cls/getRoomDetailByIdAndDate
-
-```
-request:
-id=1 (数据库教室表中的主键)
-date=20190306
+可选参数：date=20190306(不传默认为显示当天)
 
 response:
 {
@@ -277,7 +220,7 @@ response:
 }
 ```
 
-#### 审批界面
+#### 审批界面显示
 Method: GET
 
 URL: /rsv/getApprovalDetail
@@ -285,13 +228,13 @@ URL: /rsv/getApprovalDetail
 ```
 request:
 
-date=20190306
+可选参数：date=20190306(不给默认显示当天)
 
 response:
 {
     "code": 1,
     "message": "success",
-    "data": "[{\"date\":20190306,\"id\":1,\"isPass\":0,\"reservationDesc\":\"计算机协会活动\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"zhangsan\"},{\"date\":20190306,\"id\":2,\"isPass\":0,\"reservationDesc\":\"欢乐时光\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"lisi\"},{\"date\":20190306,\"id\":3,\"isPass\":0,\"reservationDesc\":\"计算机协会活动\",\"roomId\":0,\"roomNumber\":2,\"teachingBuilding\":\"教1\",\"time\":4,\"userId\":0,\"userName\":\"zhangsan\"},{\"date\":20190306,\"id\":5,\"isPass\":0,\"reservationDesc\":\"计算机协会又来了\",\"roomId\":0,\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":3,\"userId\":0,\"userName\":\"zhangsan\"}]"
+    "data": "[{\"date\":20190306,\"id\":1,\"reservationDesc\":\"计算机协会活动\",\"roomNumber\":1,\"teachingBuilding\":\"教1\",\"time\":4,\"userName\":\"zhangsan\"}]"
 }
 ```
 
@@ -302,9 +245,11 @@ URL: /rsv/approvalOperation
 
 ```
 request:
-id=4&ope=2&desc=驳回
-id=4&ope=1&desc=同意
+id=4(操作的学生申请id)
 
+ope=3(操作码，1为通过，3为驳回)
+
+desc=驳回(驳回理由，若为通过则不需要给)
 
 response:
 {
@@ -324,16 +269,3 @@ response:
 1. 需要使用ngrok将内外网进行一个穿透，使项目可以通过外网访问。
 2. 数据库设计，需要尽量的满足数据的设计原则，并且数据库之间减少耦合。
 3. 预约的逻辑实现是有多种多样的，本项目增加了难度，加入了课表系统，这使得本系统更基于现实情况。在此种情况下来实现预约是需要做大量的逻辑处理的。
-
-## 前端设计
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/7BF86AFED4C74468A13771AAFFEE938B/20560)
-
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/0402DCDBFFDC41B693FCC3695FD6E73F/20562)
-
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/98659FA19CB747B1BB9341401DC6E1F6/20561)
-
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/78BC5253723846338AF633A5295A6864/20564)
-
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/FE28B1A63D494849A9CC815B8FA9A16C/20568)
-
-![image](https://note.youdao.com/yws/public/resource/b7f20240ec3000076c6964d090b97c75/xmlnote/2D2E64CBC6A940AB8F1BAFC6F945EF27/20566)

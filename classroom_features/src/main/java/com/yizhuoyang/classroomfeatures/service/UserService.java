@@ -24,10 +24,18 @@ public class UserService {
     public Result register(UserRequest userRequest) {
         try {
             int code = userDao.register(userRequest);
-            return new Result(code, "success");
+            if (code == 1) {
+                return new Result(1, "成功");
+            } else {
+                return new Result(-1, "失败");
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return new Result(-1, "fail");
+            return new Result(-1, "失败");
         }
+    }
+
+    public String getUserNameByUId(String uid) throws Exception {
+        return userDao.getUserNameByUId(uid);
     }
 }

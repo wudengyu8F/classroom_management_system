@@ -5,23 +5,34 @@ package com.yizhuoyang.classroomfeatures.domain;
  */
 public class RespRoom {
 
-    private int time;
+    private int timeId;
+
+    private String time;
 
     private String status;
 
     public RespRoom() {
     }
 
-    public RespRoom(int time, String status) {
+    public RespRoom(int timeId, String time, String status) {
+        this.timeId = timeId;
         this.time = time;
         this.status = status;
     }
 
-    public int getTime() {
+    public int getTimeId() {
+        return timeId;
+    }
+
+    public void setTimeId(int timeId) {
+        this.timeId = timeId;
+    }
+
+    public String getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
