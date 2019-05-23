@@ -53,9 +53,11 @@ key `user_search` (user_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='预约信息表';
 
 insert into reservation_info (room_id,date,time,user_id,username,reservation_desc,is_pass)
-value(1,20190522,3,10000111,"zhangsan","hello",0),
-(2,20190522,5,10000111,"zhangsan","hello1",1),
-(3,20190522,1,10000111,"zhangsan","hello2",3);
+value(1,20190523,3,10000111,"zhangsan","hello",0),
+(2,20190523,5,10000111,"zhangsan","hello1",1),
+(3,20190523,1,10000111,"zhangsan","hello2",3),
+(2,20190523,4,10000112,"zhangsan","hello1",0),
+(3,20190523,2,10000112,"zhangsan","hello2",3);
 
 
 create table class_schedule(

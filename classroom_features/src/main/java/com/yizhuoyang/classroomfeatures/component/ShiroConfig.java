@@ -35,7 +35,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilters(stringFilterHashMap);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //注意过滤器配置顺序 不能颠倒
-        filterChainDefinitionMap.put("/login/logout", "logout");
+        filterChainDefinitionMap.put("/api/login/logout", "logout");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了，登出后跳转配置的loginUrl
         //认证过滤器 authc--认证  anon--不需要认证
         //角色过滤器  审批页面进行一个角色判断
@@ -45,9 +45,9 @@ public class ShiroConfig {
         //TODO 打开该代码
         filterChainDefinitionMap.put("/**", "authc");
 //        //登录地址
-        shiroFilterFactoryBean.setLoginUrl("/login/subLogin");
+        shiroFilterFactoryBean.setLoginUrl("/api/login/subLogin");
         //未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/login/error");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/api/login/error");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
