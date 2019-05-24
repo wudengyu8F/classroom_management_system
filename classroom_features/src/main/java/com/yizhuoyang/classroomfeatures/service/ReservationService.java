@@ -59,6 +59,9 @@ public class ReservationService {
 
     public Result insertInfo(ReservationInfo reservationInfo) {
         try {
+            if (reservationInfo.getDate() == 0) {
+                reservationInfo.setDate(Utils.getDate());
+            }
             boolean flag = reservationDao.insertInfo(reservationInfo);
             if (flag) {
                 return new Result(1, "成功");
@@ -73,7 +76,8 @@ public class ReservationService {
 
     public Result getStudentRSVById(Integer uid) {
         try {
-            List<ReservationInfo> details = reservationDao.getStudentRSVById(uid);
+            int date = Utils.getDate();
+            List<ReservationInfo> details = reservationDao.getStudentRSVById(uid, date);
             for (ReservationInfo r : details) {
                 r.setTime(Utils.getTimeMapping(r.getTimeId()));
                 r.setIsPass(Utils.getCodeMapping(r.getIsPassId()));

@@ -1,6 +1,6 @@
 spring:
   output:
     ansi:
-      enabled: always
+      enabled: detect
   profiles:
     active: online

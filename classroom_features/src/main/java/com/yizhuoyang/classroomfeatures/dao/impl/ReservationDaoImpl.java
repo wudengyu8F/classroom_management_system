@@ -30,13 +30,13 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
     }
 
     @Override
-    public List<ReservationInfo> getStudentRSVById(Integer uid) {
+    public List<ReservationInfo> getStudentRSVById(Integer uid, Integer date) {
         String sql = "select r.id as id,c.teaching_building as teaching_building,c.room_number as room_number, " +
                 "r.date as date,r.time as time,r.is_pass as is_pass " +
                 "from reservation_info r,classroom c " +
-                "where r.user_id = ? and r.room_id=c.id and r.is_pass<>2 " +
+                "where r.user_id = ? and r.date >= ? and r.room_id=c.id and r.is_pass<>2 " +
                 "order by r.time desc;";
-        return jdbcTemplate.query(sql, new Object[]{uid}, (rs, i) -> {
+        return jdbcTemplate.query(sql, new Object[]{uid, date}, (rs, i) -> {
             ReservationInfo reservationInfo = new ReservationInfo();
             reservationInfo.setId(rs.getInt("id"));
             reservationInfo.setTeachingBuilding(rs.getString("teaching_building"));
@@ -59,7 +59,7 @@ public class ReservationDaoImpl extends AbstractDao implements ReservationDao {
         String sql = "select r.id as id,c.teaching_building as teaching_building,c.room_number as room_number," +
                 "r.date as date,r.time as time,r.username as username,r.reservation_desc as reservation_desc " +
                 "from reservation_info r,classroom c " +
-                "where r.date=? and r.room_id=c.id and r.is_pass=0;";
+                "where r.date>=? and r.room_id=c.id and r.is_pass=0;";
         return jdbcTemplate.query(sql, new Object[]{date}, (rs, i) -> {
             ReservationInfo reservationInfo = new ReservationInfo();
             reservationInfo.setId(rs.getInt("id"));

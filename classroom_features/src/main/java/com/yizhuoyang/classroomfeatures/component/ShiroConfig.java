@@ -33,21 +33,25 @@ public class ShiroConfig {
         stringFilterHashMap.put("roles", rolesOrFilter());
         stringFilterHashMap.put("logout", myLogoutFilter());
         shiroFilterFactoryBean.setFilters(stringFilterHashMap);
+        //登录地址
+        shiroFilterFactoryBean.setLoginUrl("/login/subLogin");
+        //线下配置打开下一行
+//        shiroFilterFactoryBean.setLoginUrl("/api/login/subLogin");
+        //未授权界面
+        shiroFilterFactoryBean.setUnauthorizedUrl("/login/error");
+        //线下配置打开下一行
+//        shiroFilterFactoryBean.setUnauthorizedUrl("/api/login/error");
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //注意过滤器配置顺序 不能颠倒
-        filterChainDefinitionMap.put("/api/login/logout", "logout");
+        filterChainDefinitionMap.put("/login/logout", "logout");
         //配置退出 过滤器,其中的具体的退出代码Shiro已经替我们实现了，登出后跳转配置的loginUrl
         //认证过滤器 authc--认证  anon--不需要认证
         //角色过滤器  审批页面进行一个角色判断
-        //TODO 打开该代码
         filterChainDefinitionMap.put("/rsv/high/*", "roles[admin]");
         filterChainDefinitionMap.put("/login/*", "anon");
-        //TODO 打开该代码
+        filterChainDefinitionMap.put("/cls/*", "anon");
+        filterChainDefinitionMap.put("/utils", "anon");
         filterChainDefinitionMap.put("/**", "authc");
-//        //登录地址
-        shiroFilterFactoryBean.setLoginUrl("/api/login/subLogin");
-        //未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/api/login/error");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
@@ -102,6 +106,8 @@ public class ShiroConfig {
     private MyLogoutFilter myLogoutFilter() {
         MyLogoutFilter myLogoutFilter = new MyLogoutFilter();
         myLogoutFilter.setRedirectUrl("/login/out");
+        //线下配置打开下一行
+//        myLogoutFilter.setRedirectUrl("/api/login/out");
         myLogoutFilter.setPostOnlyLogout(true);
         return myLogoutFilter;
     }

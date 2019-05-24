@@ -10,7 +10,7 @@ public interface ReservationDao {
 
     boolean insertInfo(ReservationInfo reservationInfo) throws Exception;
 
-    List<ReservationInfo> getStudentRSVById(Integer uid) throws Exception;
+    List<ReservationInfo> getStudentRSVById(Integer uid, Integer date) throws Exception;
 
     int cancelApplication(Integer id) throws Exception;
 

@@ -4,4 +4,4 @@ server:
 QRCode:
 #  classroomFeaturesPath: https://www.baidu.com
 #  设置前端页面主入口
-  classroomFeaturesPath: http://yizhuoyang.free.idcfengye.com/
+  classroomFeaturesPath: http://106.15.177.125
