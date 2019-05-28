@@ -47,7 +47,7 @@
       <el-row>
         <el-col :span="6"> 身份：</el-col>
         <el-col :span="18" style="margin-left: -22px;"> <el-radio v-model="roles" label="1" border >学&nbsp;生</el-radio>
-          <el-radio v-model="roles" label="2" border>管理员</el-radio></el-col>
+          <!-- <el-radio v-model="roles" label="2" border>管理员</el-radio></el-col> -->
       </el-row>
 
     </div>
