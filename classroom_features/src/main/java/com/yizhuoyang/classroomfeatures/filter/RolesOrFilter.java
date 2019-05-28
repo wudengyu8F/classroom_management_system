@@ -10,7 +10,9 @@ public class RolesOrFilter extends AuthorizationFilter {
 
     @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) {
+        //获得当前主体
         Subject subject = getSubject(servletRequest, servletResponse);
+        //角色数据强转
         String[] roles = (String[]) o;
         if (roles == null || roles.length == 0) {
             return true;

@@ -12,6 +12,7 @@ public class Utils {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmm");
         Calendar calendar = Calendar.getInstance();
         Date time = calendar.getTime();
+        //将当前时间戳格式化
         String str = df.format(time);
         long dateMin = Long.valueOf(str);
         return (int) (dateMin / 10000);

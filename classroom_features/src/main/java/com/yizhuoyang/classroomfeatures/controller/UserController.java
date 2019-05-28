@@ -28,7 +28,9 @@ public class UserController {
         if (userRequest == null) {
             return new Result(-1, "参数错误");
         }
+        //主体提交认证请求
         Subject subject = SecurityUtils.getSubject();
+        //获得token
         UsernamePasswordToken token = new UsernamePasswordToken(Integer.toString(userRequest.getUserId()), userRequest.getPassword());
         try {
             token.setRememberMe(userRequest.isRememberMe());

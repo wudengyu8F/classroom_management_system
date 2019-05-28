@@ -15,14 +15,14 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
     @Resource
     private JedisUtil jedisUtil;
-
+    //cache前缀
     private final String CACHE_PREFIX = "project-cache";
 
     private byte[] getKey(K k) {
         if (k instanceof String) {
             return (CACHE_PREFIX + k).getBytes();
         }
-
+        //若不是，取序列化后的数组
         return SerializationUtils.serialize(k);
     }
 
@@ -31,6 +31,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
         System.out.println("从redis中获取权限数据");
         byte[] value = jedisUtil.get(getKey(k));
         if (value != null) {
+            //返回反序列化数组
             return (V) SerializationUtils.deserialize(value);
         }
         return null;
@@ -41,6 +42,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
         byte[] key = getKey(k);
         byte[] value = SerializationUtils.serialize(v);
         jedisUtil.set(key, value);
+        //设置超时时间
         jedisUtil.expire(key, 600);
         return v;
     }

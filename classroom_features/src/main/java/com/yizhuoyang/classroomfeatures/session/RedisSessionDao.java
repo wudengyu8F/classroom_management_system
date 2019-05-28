@@ -17,9 +17,9 @@ public class RedisSessionDao extends AbstractSessionDAO {
 
     @Autowired
     private JedisUtil jedisUtil;
-
+    //添加前缀
     private final String SHIROSESSIONPREFIX = "project-session";
-
+    //key为前缀+key
     private byte[] getKey(String key) {
         return (SHIROSESSIONPREFIX + key).getBytes();
     }
@@ -29,12 +29,14 @@ public class RedisSessionDao extends AbstractSessionDAO {
             byte[] key = getKey(session.getId().toString());
             byte[] value = SerializationUtils.serialize(session);
             jedisUtil.set(key, value);
+            //设置尝试时间600s
             jedisUtil.expire(key, 600);
         }
     }
 
     @Override
     protected Serializable doCreate(Session session) {
+        //通过session获取sessionId
         Serializable sessionId = generateSessionId(session);
         //sessionId和session进行捆绑
         assignSessionId(session, sessionId);
@@ -64,12 +66,15 @@ public class RedisSessionDao extends AbstractSessionDAO {
         if (session == null || session.getId() == null) {
             return;
         }
+        //获取指定key
         byte[] key = getKey(session.getId().toString());
+        //用jedis操作redis删除key
         jedisUtil.del(key);
     }
 
     @Override
     public Collection<Session> getActiveSessions() {
+        //通过所有前缀获得所有key
         Set<byte[]> keys = jedisUtil.keys(SHIROSESSIONPREFIX);
         Set<Session> sessions = new HashSet<>();
         if (CollectionUtils.isEmpty(keys)) {

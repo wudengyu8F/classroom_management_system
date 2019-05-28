@@ -73,7 +73,7 @@ public class ShiroConfig {
         myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return myShiroRealm;
     }
-
+    //创建securityManager对象
     @Bean("securityManager")
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
@@ -95,7 +95,7 @@ public class ShiroConfig {
     public RedisCacheManager redisCacheManager() {
         return new RedisCacheManager();
     }
-
+    //自动登陆
     @Bean
     public CookieRememberMeManager rememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();

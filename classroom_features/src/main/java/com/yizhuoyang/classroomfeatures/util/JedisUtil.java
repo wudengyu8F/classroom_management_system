@@ -11,12 +11,12 @@ import java.util.Set;
 public class JedisUtil {
 
     private final JedisPoolFactory factory;
-
+    //自动注入
     @Autowired
     public JedisUtil(JedisPoolFactory factory) {
         this.factory = factory;
     }
-
+    //获得连接
     private Jedis getResource() {
         return factory.getJedisPool().getResource();
     }
@@ -27,7 +27,7 @@ public class JedisUtil {
             return value;
         }
     }
-
+//操作redis过期时间
     public void expire(byte[] key, int i) {
         try (Jedis jedis = getResource()) {
             jedis.expire(key, i);
@@ -45,7 +45,7 @@ public class JedisUtil {
             jedis.del(key);
         }
     }
-
+    //加前缀为了区分，用*分隔开
     public Set<byte[]> keys(String shiroSessionPrefix) {
         try (Jedis jedis = getResource()) {
             return jedis.keys((shiroSessionPrefix + "*").getBytes());
