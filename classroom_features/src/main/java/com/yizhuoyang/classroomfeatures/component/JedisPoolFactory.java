@@ -16,7 +16,7 @@ public class JedisPoolFactory {
     public JedisPoolFactory(RedisProperties properties) {
         this.properties = properties;
     }
-
+    //配置redis数据库
     @Bean
     public JedisPool getJedisPool() {
         JedisPoolConfig config = new JedisPoolConfig();

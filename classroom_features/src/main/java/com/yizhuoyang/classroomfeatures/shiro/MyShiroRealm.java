@@ -48,9 +48,10 @@ public class MyShiroRealm extends AuthorizingRealm {
         if ("".equals(password)) {
             return null;
         }
+        //返回信息
         return new SimpleAuthenticationInfo(userId, password, "myShiroRealm");
     }
-
+    //模拟数据库查询凭证
     private String getPasswordByUserId(String userId) {
         return userDao.getPasswordByUserId(userId);
     }

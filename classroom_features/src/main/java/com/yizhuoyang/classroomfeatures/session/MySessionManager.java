@@ -20,13 +20,16 @@ public class MySessionManager extends DefaultWebSessionManager {
         }
 
         if (request != null && sessionId != null) {
+            //从request中获取session
             Session session = (Session) request.getAttribute(sessionId.toString());
             if (session != null) {
                 return session;
             }
         }
+        //从redis中取出
         Session session = super.retrieveSession(sessionKey);
         if (request != null && sessionId != null) {
+            //将取出来的session设置到request中，返回
             request.setAttribute(sessionId.toString(), session);
         }
         return session;
