@@ -3,4 +3,4 @@ spring:
     ansi:
       enabled: detect
   profiles:
-    active: online
+    active: company
